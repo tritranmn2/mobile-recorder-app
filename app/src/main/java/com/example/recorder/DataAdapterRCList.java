@@ -10,30 +10,33 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DataAdapterRCList extends BaseAdapter {
 
     private Activity activity;
-    private String[] items_title;
-    private String[] items_length;
-    private String[] items_date;
+    private List<String> items_title;
+    private List<String> items_length;
+    private List<String> items_date;
     private ProgressBar[] progressBar;
     private Integer flag = 1;
 
-    public DataAdapterRCList(Activity activity, String[] items, String[] items1, String[] items2) {
+    public DataAdapterRCList(Activity activity, List<String> title, List<String> length, List<String> date) {
         this.activity = activity;
-        this.items_title = items;
-        this.items_length = items1;
-        this.items_date = items2;
+        this.items_title = title;
+        this.items_length = length;
+        this.items_date = date;
     }
 
     @Override
     public int getCount() {
-        return items_title.length;
+        return items_title.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return items_title[i];
+        return items_title.get(i);
     }
 
     @Override
@@ -51,13 +54,13 @@ public class DataAdapterRCList extends BaseAdapter {
 
         // Đặt chữ cho từng view trong danh sách.
         TextView tvName = (TextView) view.findViewById(R.id.list_item_title);
-        tvName.setText(items_title[i]);
+        tvName.setText(items_title.get(i));
 
         TextView tvName1 = (TextView) view.findViewById(R.id.list_item_length);
-        tvName1.setText(items_length[i]);
+        tvName1.setText(items_length.get(i));
 
         TextView tvName2 = (TextView) view.findViewById(R.id.list_item_date);
-        tvName2.setText(items_date[i]);
+        tvName2.setText(items_date.get(i));
 
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
         progressBar.setVisibility(View.GONE);

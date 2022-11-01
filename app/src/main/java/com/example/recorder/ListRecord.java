@@ -14,39 +14,61 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ListRecord extends Activity {
-
+    Activity ac = this;
+    DataAdapterRCList adapter;
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
     Button btn;
-    String[] items = {"Record 01", "Record 02", "Record 03"};
-    String[] items1 = {"00:00:01", "00:00:02", "00:00:03"};
-    String[] items2 = {"01Th01", "02Th02", "03Th03"};
+    List<String> items_title = new ArrayList<String>();
+    List<String> items_length = new ArrayList<String>();
+    List<String> items_date = new ArrayList<String>();
+//    name
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_record);
 
-
-
         listView = (ListView) findViewById(R.id.list_view);
         progressBar = (ProgressBar) findViewById(R.id.list_item_progress);
+
+        adapter = new DataAdapterRCList(this, items_title, items_length, items_date);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
         btn = (Button) findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String name = "";
+                String time_record = "";
+                String date = "";
+
+                //do something, set name, time_record, date
+
+                addItem(name, time_record, date);
             }
         });
-
-        DataAdapterRCList adapter = new DataAdapterRCList(this, items, items1, items2);
-        listView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
     }
 
-    void addItem() {
+    void addItem(String fileName, String time_record, String date) {
+        if (fileName == ""){
+            Integer length = items_title.size() + 1;
+            fileName = "Record " + length;
+        }
+        if (time_record == ""){
+            time_record = "00:00:01";
+        }
+        if (date == ""){
+            date = "01Th01";
+        }
+        items_title.add(fileName);
+        items_length.add(time_record);
+        items_date.add(date);
 
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }
 
