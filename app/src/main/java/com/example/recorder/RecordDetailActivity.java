@@ -1,15 +1,17 @@
 package com.example.recorder;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.os.Bundle;
 
-public class MainActivity extends Activity {
+public class RecordDetailActivity extends Activity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.view_detail_record);
+
+
     }
+
 }
