@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
     Activity ac = this;
     DataAdapterRCList adapter;

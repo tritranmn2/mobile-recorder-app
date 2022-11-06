@@ -1,6 +1,5 @@
 package com.example.recorder;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.os.Bundle;

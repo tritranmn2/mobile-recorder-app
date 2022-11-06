@@ -49,26 +49,31 @@ public class DataAdapterRCList extends BaseAdapter {
         // Gọi layoutInflater ra để bắt đầu ánh xạ view và data.
         LayoutInflater inflater = activity.getLayoutInflater();
 
-        // Đổ dữ liệu vào biến View, view này chính là những gì nằm trong item_name.xml
+        // Dùng inflater để gắn giao diện list_rc_item vào biến view
         view = inflater.inflate(R.layout.list_rc_item, null);
 
-        // Đặt chữ cho từng view trong danh sách.
+        // set tên từng record
         TextView tvName = (TextView) view.findViewById(R.id.list_item_title);
         tvName.setText(items_title.get(i));
 
+        //Set độ dài từng record
         TextView tvName1 = (TextView) view.findViewById(R.id.list_item_length);
         tvName1.setText(items_length.get(i));
 
+        //set ngày từng record
         TextView tvName2 = (TextView) view.findViewById(R.id.list_item_date);
         tvName2.setText(items_date.get(i));
 
+        //set ẩn cái thanh thời gian của từng record
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.INVISIBLE);
+
+        //lắng nghe sự kiện click vào title của 1 record thì cho thanh thời gian hiện lên
         tvName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (progressBar.getVisibility() == View.VISIBLE){
-                    progressBar.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
                 }
@@ -76,6 +81,7 @@ public class DataAdapterRCList extends BaseAdapter {
             }
         });
 
+        //Bật tắt nút play và pasuse
         ImageView img = (ImageView) view.findViewById(R.id.list_item_img);
         img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,11 +93,7 @@ public class DataAdapterRCList extends BaseAdapter {
                     img.setImageResource(R.drawable.playbutton);
                     flag = 1;
                 }
-//                if (progressBar.getVisibility() == View.VISIBLE){
-//                    progressBar.setVisibility(View.GONE);
-//                } else {
-//                    progressBar.setVisibility(View.VISIBLE);
-//                }
+
             }
         });
 
