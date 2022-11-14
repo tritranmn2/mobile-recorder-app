@@ -20,7 +20,7 @@ public class ListRecord extends Activity {
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
-    Button btn;
+    ImageView btn;
     List<String> items_title = new ArrayList<String>();
     List<String> items_length = new ArrayList<String>();
     List<String> items_date = new ArrayList<String>();
@@ -29,16 +29,16 @@ public class ListRecord extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_record);
+        setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.list_view);
+        listView = (ListView) findViewById(R.id.list_rc);
         progressBar = (ProgressBar) findViewById(R.id.list_item_progress);
 
         adapter = new DataAdapterRCList(this, items_title, items_length, items_date);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        btn = (Button) findViewById(R.id.btn);
+        btn = (ImageView) findViewById(R.id.btn_rc);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
