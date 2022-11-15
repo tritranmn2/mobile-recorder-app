@@ -99,9 +99,20 @@ public class DataAdapterRCList extends BaseAdapter {
             }
         });
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                switchActivity(context,RecordDetailActivity.class);
+            }
+        });
 
         // Trả về view kết quả.
         return view;
+    }
+    public void switchActivity(Context context, Class nextActivity){
+        Intent intent = new Intent(context, nextActivity);
+        context.startActivity(intent);
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.recorder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -33,7 +35,7 @@ public class ListRecord extends Activity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.list_rc);
-        progressBar = (ProgressBar) findViewById(R.id.list_item_progress);
+//        progressBar = (ProgressBar) findViewById(R.id.list_item_progress);
 
         adapter = new DataAdapterRCList(this, items_title, items_length, items_date);
         listView.setAdapter(adapter);
@@ -50,6 +52,7 @@ public class ListRecord extends Activity {
                 //do something, set name, time_record, date
 
                 addItem(name, time_record, date);
+
             }
         });
     }
@@ -71,7 +74,12 @@ public class ListRecord extends Activity {
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+
     }
 
+
+
 }
+
 
