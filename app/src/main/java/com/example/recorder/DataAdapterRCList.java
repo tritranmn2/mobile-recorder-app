@@ -71,17 +71,17 @@ public class DataAdapterRCList extends BaseAdapter {
         progressBar.setVisibility(View.INVISIBLE);
 
         //lắng nghe sự kiện click vào title của 1 record thì cho thanh thời gian hiện lên
-        tvName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (progressBar.getVisibility() == View.VISIBLE){
-                    progressBar.setVisibility(View.INVISIBLE);
-                } else {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
+//        tvName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (progressBar.getVisibility() == View.VISIBLE){
+//                    progressBar.setVisibility(View.INVISIBLE);
+//                } else {
+//                    progressBar.setVisibility(View.VISIBLE);
+//                }
+//
+//            }
+//        });
 
         //Bật tắt nút play và pasuse
         ImageView img = (ImageView) view.findViewById(R.id.list_item_img);
@@ -90,9 +90,11 @@ public class DataAdapterRCList extends BaseAdapter {
             public void onClick(View view) {
                 if (flag == 1) {
                     img.setImageResource(R.drawable.pause);
+                    progressBar.setVisibility(View.VISIBLE);
                     flag = 0;
                 } else {
                     img.setImageResource(R.drawable.playbutton);
+                    progressBar.setVisibility(View.VISIBLE);
                     flag = 1;
                 }
 

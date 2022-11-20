@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#ffffff"
+
     tools:context=".RecordDetailActivity">
     <ImageButton
         android:id="@+id/return_button"
@@ -16,17 +17,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ToggleButton
+<!--    <ToggleButton-->
+<!--        android:id="@+id/mute_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+
+<!--        android:layout_marginEnd="50dp"-->
+<!--        android:layout_marginBottom="50dp"-->
+
+<!--        android:backgroundTint="#F5FAF1F1"-->
+<!--        android:textColor="#1B1A1A"-->
+<!--        android:textColorHighlight="#100F0F"-->
+<!--        android:textColorHint="#201D1D"-->
+<!--        android:textOff=""-->
+<!--        android:textOn=""-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/play_button" />-->
+<!--    -->
+
+    <ImageButton
         android:id="@+id/mute_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/ic_mute_button_bg"
-        android:textOff=""
-        android:textOn=""
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginBottom="48dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="42dp"
+        android:maxHeight="42dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/mute"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/play_button" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageButton
         android:id="@+id/edit_button"
@@ -44,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:text="00:00"
-        android:textColor="#ffffff"
+        android:textColor="@color/black"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +77,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="00:00"
-        android:textColor="#ffffff"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,8 +86,8 @@
         android:id="@+id/record_image"
         android:layout_width="192dp"
         android:layout_height="193dp"
-        android:layout_marginBottom="100dp"
-        android:src="@android:drawable/alert_dark_frame"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/no_image"
         app:layout_constraintBottom_toTopOf="@+id/play_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -77,17 +97,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="#ffffff"
         android:text="Add image"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/record_image" />
+
     <ToggleButton
         android:id="@+id/play_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="45dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/ic_play_button_bg"
+        android:background="@drawable/pause_rectangle"
+        android:textColor="@color/black"
         android:textOff=""
         android:textOn=""
         app:layout_constraintBottom_toBottomOf="parent"
@@ -100,7 +122,7 @@
         android:layout_width="318dp"
         android:layout_height="19dp"
         android:layout_marginTop="20dp"
-        android:background="#ffffff"
+        android:scaleY="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/record_length" />
@@ -111,17 +133,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="90dp"
-        android:text="Record name"
-        android:textColor="#ffffff"
+        android:text="Record 01"
+        android:textColor="@color/black"
+
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
         android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
+        android:layout_marginRight="48dp"
         android:layout_marginBottom="50dp"
         android:checked="true"
         android:text="1.0"
@@ -129,7 +152,8 @@
         android:textOn="1.0"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/play_button" />
+        app:layout_constraintRight_toRightOf="parent"
+  />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
