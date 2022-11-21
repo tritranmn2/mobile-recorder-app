@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RecordDetailActivity"/>
+        <service android:name=".PlayBackground"/>
     </application>
 
 </manifest>

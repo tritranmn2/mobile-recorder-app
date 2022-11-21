@@ -23,7 +23,7 @@ public class ListRecord extends Activity {
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
-    ImageView btn;
+    ImageView btn_rc;
     List<String> items_title = new ArrayList<String>();
     List<String> items_length = new ArrayList<String>();
     List<String> items_date = new ArrayList<String>();
@@ -33,6 +33,7 @@ public class ListRecord extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toast.makeText(this, "OnCreated", Toast.LENGTH_SHORT).show();
 
         listView = (ListView) findViewById(R.id.list_rc);
 //        progressBar = (ProgressBar) findViewById(R.id.list_item_progress);
@@ -41,8 +42,10 @@ public class ListRecord extends Activity {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        btn = (ImageView) findViewById(R.id.btn_rc);
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn_rc = (ImageView) findViewById(R.id.btn_rc);
+
+
+        btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = "";
@@ -55,6 +58,35 @@ public class ListRecord extends Activity {
 
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        Toast.makeText(this, "OnPause", Toast.LENGTH_SHORT).show();
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onResume() {
+        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
+
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        Toast.makeText(this, "OnRestart", Toast.LENGTH_SHORT).show();
+
+        super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Toast.makeText(this, "OnDestroy", Toast.LENGTH_SHORT).show();
+
+        super.onDestroy();
     }
 
     void addItem(String fileName, String time_record, String date) {
@@ -74,7 +106,6 @@ public class ListRecord extends Activity {
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
 
     }
 

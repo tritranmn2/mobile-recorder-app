@@ -1,9 +1,13 @@
 package com.example.recorder;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +26,8 @@ public class DataAdapterRCList extends BaseAdapter {
     private List<String> items_length;
     private List<String> items_date;
     private ProgressBar[] progressBar;
-    private Integer flag = 1;
+    public Intent playbackIntent;
+    private boolean isServiceRunning =false;
 
     public DataAdapterRCList(Activity activity, List<String> title, List<String> length, List<String> date) {
         this.activity = activity;
@@ -70,32 +75,31 @@ public class DataAdapterRCList extends BaseAdapter {
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
         progressBar.setVisibility(View.INVISIBLE);
 
-        //lắng nghe sự kiện click vào title của 1 record thì cho thanh thời gian hiện lên
-//        tvName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (progressBar.getVisibility() == View.VISIBLE){
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                } else {
-//                    progressBar.setVisibility(View.VISIBLE);
-//                }
-//
-//            }
-//        });
-
         //Bật tắt nút play và pasuse
-        ImageView img = (ImageView) view.findViewById(R.id.list_item_img);
-        img.setOnClickListener(new View.OnClickListener() {
+        ImageView btn_item = (ImageView) view.findViewById(R.id.list_item_img);
+
+        btn_item.setOnClickListener(new View.OnClickListener() {
+            int flag = 1;
             @Override
-            public void onClick(View view) {
-                if (flag == 1) {
-                    img.setImageResource(R.drawable.pause);
+            public void onClick(View v) {
+                Context context = v.getContext();
+                ImageView v1= (ImageView) v;
+                final Bitmap bmap = ((BitmapDrawable)v1.getDrawable()).getBitmap();
+                Drawable myDrawable = context.getDrawable(R.drawable.playbutton);
+                final Bitmap myLogo = ((BitmapDrawable) myDrawable).getBitmap();
+                if (bmap.sameAs(myLogo)) {
+                    if (isServiceRunning) {
+                        context.stopService(playbackIntent);
+                    }
+                    btn_item.setImageResource(R.drawable.pause);
                     progressBar.setVisibility(View.VISIBLE);
-                    flag = 0;
+                    playbackIntent = new Intent(context,PlayBackground.class);
+                    context.startService(playbackIntent);
+                    isServiceRunning=true;
                 } else {
-                    img.setImageResource(R.drawable.playbutton);
+                    btn_item.setImageResource(R.drawable.playbutton);
                     progressBar.setVisibility(View.VISIBLE);
-                    flag = 1;
+                    context.stopService(playbackIntent);
                 }
 
             }
@@ -116,6 +120,7 @@ public class DataAdapterRCList extends BaseAdapter {
         Intent intent = new Intent(context, nextActivity);
         context.startActivity(intent);
     }
+
 
 
 }
