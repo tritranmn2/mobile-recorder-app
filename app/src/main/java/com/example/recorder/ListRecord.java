@@ -89,6 +89,13 @@ public class ListRecord extends Activity {
         super.onDestroy();
     }
 
+    @Override
+    protected void onStop() {
+        Toast.makeText(this, "OnStop", Toast.LENGTH_SHORT).show();
+
+        super.onStop();
+    }
+
     void addItem(String fileName, String time_record, String date) {
         if (fileName == ""){
             Integer length = items_title.size() + 1;

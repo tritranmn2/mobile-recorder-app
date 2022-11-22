@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +95,7 @@ public class DataAdapterRCList extends BaseAdapter {
                     btn_item.setImageResource(R.drawable.pause);
                     progressBar.setVisibility(View.VISIBLE);
                     playbackIntent = new Intent(context,PlayBackground.class);
+
                     context.startService(playbackIntent);
                     isServiceRunning=true;
                 } else {

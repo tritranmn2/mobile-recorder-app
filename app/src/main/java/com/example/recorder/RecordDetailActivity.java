@@ -21,6 +21,7 @@ public class RecordDetailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
+                onRestart();
                 switchActivity(context,ListRecord.class);
             }
         });
