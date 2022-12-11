@@ -2,7 +2,11 @@
 
 Author: Made by Group09
 #tritranmn2
+
+
+
 Cách làm việc với git
+
 0. B0: Clone code về local trước khi làm việc(nếu chưa clone). Câu lệnh git clone https://github.com/tritranmn2/mobile-recorder-app.git
 1. B1: Pull code từ branch dev về local trước khi làm 1 chức năng. Câu lệnh git pull origin dev
 2. B2 Tạo nhánh mới (tên nhánh có thể tự đặt hoặc lấy bên jira). Câu lệnh git checkout -b <tên nhánh>
