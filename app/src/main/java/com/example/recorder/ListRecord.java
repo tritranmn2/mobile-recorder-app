@@ -18,15 +18,18 @@ import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
+
     Activity ac = this;
     DataAdapterRCList adapter;
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
     ImageView btn_rc;
+
     List<String> items_title = new ArrayList<String>();
     List<String> items_length = new ArrayList<String>();
     List<String> items_date = new ArrayList<String>();
+
 //    name
 
     @Override
@@ -41,6 +44,10 @@ public class ListRecord extends Activity {
         adapter = new DataAdapterRCList(this, items_title, items_length, items_date);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+//Load danh sach nhac da luu
+        addItem("song1","1","1/1/2022");
+        addItem("song2","1","1/1/2022");
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 

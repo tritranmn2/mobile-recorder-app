@@ -21,7 +21,7 @@ public class PlayBackground extends Service {
         Toast.makeText(this, "playback Created", Toast.LENGTH_LONG).show();
         Log.e("playback", "onCreate");
         boolIsServiceCreated = true;
-        player = MediaPlayer.create(getApplicationContext(), R.raw.music);
+        player = MediaPlayer.create(getApplicationContext(), R.raw.song2);
     }
 
     @Override
