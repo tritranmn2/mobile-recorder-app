@@ -13,9 +13,9 @@ public class InitDatabase extends SQLiteOpenHelper {
         super(context, name, factory, version);
         this.QueryData("DROP TABLE IF EXISTS Records");
         this.QueryData("CREATE TABLE IF NOT EXISTS Records(id INT, name VARCHAR(255), dateSave TEXT, length TEXT,source TEXT)");
-        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord01', datetime('now'), time(datetime('now')))");
-        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord02', datetime('now'), time(datetime('now')))");
-        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord03', datetime('now'), time(datetime('now')))");
+        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(0, 'datarecord00', datetime('now'), time(datetime('now')))");
+        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(1, 'datarecord01', datetime('now'), time(datetime('now')))");
+        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(2, 'datarecord02', datetime('now'), time(datetime('now')))");
 //
     }
 

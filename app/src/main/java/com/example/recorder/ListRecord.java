@@ -25,14 +25,11 @@ public class ListRecord extends Activity {
     public ProgressBar progressBar;
     public ImageView img;
     ImageView btn_rc;
-    List<String> items_title = new ArrayList<String>();
-    List<String> items_length = new ArrayList<String>();
-    List<String> items_date = new ArrayList<String>();
+
     List<Record> items = new ArrayList<Record>();
-//    name
 
     //database
-    InitDatabase database;
+    static InitDatabase database;
 
 
     @Override
@@ -45,7 +42,7 @@ public class ListRecord extends Activity {
         displayAllRecords();
 
         listView = (ListView) findViewById(R.id.list_rc);
-        adapter = new DataAdapterRCList(this, items_title, items_length, items_date);
+        adapter = new DataAdapterRCList(this, items);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
@@ -55,10 +52,9 @@ public class ListRecord extends Activity {
             public void onClick(View view) {
                 String name = "";
                 String time_record = "";
-                String date = "";
                 String source = "";
                 //do something, set name, time_record, date
-                addItem(name, time_record, date,source);
+                addItem(name, time_record,source);
             }
         });
     }
@@ -94,35 +90,62 @@ public class ListRecord extends Activity {
         super.onStop();
     }
 
-    void addItem(String fileName, String time_record, String date, String source) {
+    void addItem(String fileName, String time_record, String source) {
         if (fileName == ""){
-            Integer length = items_title.size() + 1;
+            Integer length = items.size() + 1;
             fileName = "Record-" + String.valueOf(length);
         }
-        if (time_record == ""){
-            time_record = "00:00:01";
-        }
-        if (date == ""){
-            date = "2022-12-12";
-        }
-        Record record = new Record(fileName,date,time_record,source);
-        items.add(record);
-        items_title.add(fileName);
-        items_length.add(time_record);
-        items_date.add(date);
+
+        Record record = new Record(fileName,source);
+
         createRecord(record);
+        Record recordDb = getRecord(record.name);
+
+        items.add(recordDb);
+
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
     void createRecord(Record record){
-        String query ="INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord04', datetime('now'), time(datetime('now')))";
-
-        database.QueryData(query);
+        Cursor data = database.GetData("SELECT MAX(id) FROM Records");
+        data.moveToNext();
+        int id = data.getInt(0) + 1 ;
+        database.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(" +
+                String.valueOf(id) +
+                ", '" +
+                record.name +
+                "', datetime('now'), time(datetime('now')))");
     }
     void DeleteRecord(int id){
-        String query ="DELETE FROM Records where id="+ String.valueOf(id);
+        String query ="DELETE FROM Records where id= '"+ String.valueOf(id) +"'";
         database.QueryData(query);
     }
+
+    Cursor getAllRecords() {
+        Cursor data = database.GetData("SELECT * FROM Records" );
+        return data;
+    }
+    Record getRecord(String name) {
+        Cursor data = database.GetData("SELECT * FROM Records WHERE name = '" + name.trim() + "'");
+        data.moveToNext();
+        int id = data.getInt(0);
+        String date = data.getString(2);
+        String time = data.getString(3);
+        String source = data.getString(4);
+        Record record = new Record(name, date, time, source);
+        return  record;
+    }
+    static Record getRecord(int id) {
+        Cursor data = database.GetData("SELECT * FROM Records WHERE id = '" + String.valueOf(id) + "'");
+        data.moveToNext();
+        String name = data.getString(1);
+        String date = data.getString(2);
+        String time = data.getString(3);
+        String source = data.getString(4);
+        Record record = new Record(name, date, time, source);
+        return  record;
+    }
+
     void displayAllRecords() {
         Cursor data = database.GetData("SELECT * FROM Records");
         while(data.moveToNext()) {
@@ -130,12 +153,9 @@ public class ListRecord extends Activity {
             String name = data.getString(1);
             String date = data.getString(2);
             String time = data.getString(3);
-//            Toast.makeText(this, name.toString(), Toast.LENGTH_SHORT).show();
-
-            items_title.add(name);
-            items_length.add(time);
-            items_date.add(date);
-//            Toast.makeText(this, "insert data to list", Toast.LENGTH_SHORT).show();
+            String source = data.getString(4);
+            Record record = new Record(name, date, time, source);
+            items.add(record);
         }
     }
 

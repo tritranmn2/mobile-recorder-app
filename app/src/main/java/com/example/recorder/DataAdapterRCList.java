@@ -23,29 +23,32 @@ import java.util.List;
 public class DataAdapterRCList extends BaseAdapter {
 
     private Activity activity;
-    private List<String> items_title;
-    private List<String> items_length;
-    private List<String> items_date;
-    private List<Record> items;
+//    private List<String> items_title;
+//    private List<String> items_length;
+//    private List<String> items_date;
+    private List<Record> records;
     private ProgressBar[] progressBar;
     public Intent playbackIntent;
     private boolean isServiceRunning =false;
 
-    public DataAdapterRCList(Activity activity, List<String> title, List<String> length, List<String> date) {
+//    public DataAdapterRCList(Activity activity, List<String> title, List<String> length, List<String> date) {
+//        this.activity = activity;
+//        this.items_title = title;
+//        this.items_length = length;
+//        this.items_date = date;
+//    }
+    public DataAdapterRCList(Activity activity, List<Record> records ) {
         this.activity = activity;
-        this.items_title = title;
-        this.items_length = length;
-        this.items_date = date;
+        this.records = records;
     }
-
     @Override
     public int getCount() {
-        return items_title.size();
+        return records.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return items_title.get(i);
+        return records.get(i).name;
     }
 
     @Override
@@ -63,15 +66,15 @@ public class DataAdapterRCList extends BaseAdapter {
 
         // set tên từng record
         TextView tvName = (TextView) view.findViewById(R.id.list_item_title);
-        tvName.setText(items_title.get(i));
+        tvName.setText(records.get(i).name);
 
         //Set độ dài từng record
         TextView tvName1 = (TextView) view.findViewById(R.id.list_item_length);
-        tvName1.setText(items_length.get(i));
+        tvName1.setText(records.get(i).lenght);
 
         //set ngày từng record
         TextView tvName2 = (TextView) view.findViewById(R.id.list_item_date);
-        tvName2.setText(items_date.get(i));
+        tvName2.setText(records.get(i).dateSave);
 
         //set ẩn cái thanh thời gian của từng record
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
@@ -112,15 +115,16 @@ public class DataAdapterRCList extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                switchActivity(context,RecordDetailActivity.class);
+                switchActivity(context,RecordDetailActivity.class,i);
             }
         });
 
         // Trả về view kết quả.
         return view;
     }
-    public void switchActivity(Context context, Class nextActivity){
+    public void switchActivity(Context context, Class nextActivity,int id){
         Intent intent = new Intent(context, nextActivity);
+        intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
