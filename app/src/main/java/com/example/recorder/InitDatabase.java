@@ -16,7 +16,7 @@ public class InitDatabase extends SQLiteOpenHelper {
         this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord01', datetime('now'), time(datetime('now')))");
         this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord02', datetime('now'), time(datetime('now')))");
         this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(null, 'datarecord03', datetime('now'), time(datetime('now')))");
-
+//
     }
 
     public void QueryData(String sql) {
