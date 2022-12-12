@@ -29,7 +29,9 @@ public class RecordDetailActivity extends Activity {
     }
     public void switchActivity(Context context, Class nextActivity){
         Intent intent = new Intent(context, nextActivity);
-        context.startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(intent, 0);
+//        context.startActivity(intent);
     }
 
 }

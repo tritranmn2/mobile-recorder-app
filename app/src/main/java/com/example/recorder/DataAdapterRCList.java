@@ -26,6 +26,7 @@ public class DataAdapterRCList extends BaseAdapter {
     private List<String> items_title;
     private List<String> items_length;
     private List<String> items_date;
+    private List<Record> items;
     private ProgressBar[] progressBar;
     public Intent playbackIntent;
     private boolean isServiceRunning =false;
