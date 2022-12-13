@@ -28,7 +28,6 @@ public class DataAdapterRCList extends BaseAdapter {
 //    private List<String> items_date;
     private List<Record> records;
     private ProgressBar[] progressBar;
-    public Intent playbackIntent;
     private boolean isServiceRunning =false;
 
 //    public DataAdapterRCList(Activity activity, List<String> title, List<String> length, List<String> date) {
@@ -81,32 +80,51 @@ public class DataAdapterRCList extends BaseAdapter {
         progressBar.setVisibility(View.INVISIBLE);
 
         //Bật tắt nút play và pasuse
-        ImageView btn_item = (ImageView) view.findViewById(R.id.list_item_img);
+        ImageView btn_item = (ImageView) view.findViewById(R.id.item_play_btn);
 
         btn_item.setOnClickListener(new View.OnClickListener() {
-            int flag = 1;
+//            int flag = 1;
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
+//                Intent playbackIntent = new Intent(context,PlayBackground.class);
+                String ACTION = "";
+                String nameRecord = records.get(i).name;
                 ImageView v1= (ImageView) v;
-                final Bitmap bmap = ((BitmapDrawable)v1.getDrawable()).getBitmap();
+                final Bitmap bmapCurrent = ((BitmapDrawable)v1.getDrawable()).getBitmap();
                 Drawable myDrawable = context.getDrawable(R.drawable.playbutton);
-                final Bitmap myLogo = ((BitmapDrawable) myDrawable).getBitmap();
-                if (bmap.sameAs(myLogo)) {
-                    if (isServiceRunning) {
-                        context.stopService(playbackIntent);
-                    }
-                    btn_item.setImageResource(R.drawable.pause);
-                    progressBar.setVisibility(View.VISIBLE);
-                    playbackIntent = new Intent(context,PlayBackground.class);
-
-                    context.startService(playbackIntent);
-                    isServiceRunning=true;
-                } else {
+                final Bitmap bmapPlayButton = ((BitmapDrawable) myDrawable).getBitmap();
+                if(bmapCurrent.sameAs(bmapPlayButton)){//chưa phát nhạc
+                    btn_item.setImageResource(R.drawable.pause); //set sang nut pause
+                    ACTION = "PLAY";
+                }else{
                     btn_item.setImageResource(R.drawable.playbutton);
-                    progressBar.setVisibility(View.VISIBLE);
-                    context.stopService(playbackIntent);
+                    ACTION = "STOP";
                 }
+                handleService(context,PlayBackground.class,ACTION,nameRecord);
+//                Bundle extras = new Bundle();
+//                extras.putString("ACTION",ACTION);
+//                extras.putString("name",nameRecord);
+//                playbackIntent.putExtras(extras);
+
+
+//                if (bmap.sameAs(myLogo)) {
+//                    if (isServiceRunning) {
+//                        context.stopService(playbackIntent);
+//                    }
+//                    btn_item.setImageResource(R.drawable.pause);
+//                    progressBar.setVisibility(View.VISIBLE);
+//                    playbackIntent = new Intent(context,PlayBackground.class);
+//
+//                    context.startService(playbackIntent);
+//                    isServiceRunning=true;
+//                } else {
+//                    btn_item.setImageResource(R.drawable.playbutton);
+//                    progressBar.setVisibility(View.VISIBLE);
+//                    context.stopService(playbackIntent);
+//                }
+//                if()
+
 
             }
         });
@@ -115,7 +133,7 @@ public class DataAdapterRCList extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-                switchActivity(context,RecordDetailActivity.class,i);
+                switchDetailActivity(context,RecordDetailActivity.class,i);
             }
 
         });
@@ -123,10 +141,21 @@ public class DataAdapterRCList extends BaseAdapter {
         // Trả về view kết quả.
         return view;
     }
-    public void switchActivity(Context context, Class nextActivity,int id){
+    public void switchDetailActivity(Context context, Class nextActivity,int id){
         Intent intent = new Intent(context, nextActivity);
         intent.putExtra("id", id);
         context.startActivity(intent);
+    }
+    public void handleService(Context context, Class nextActivity,  String action, String nameRecord){
+        Intent playbackIntent = new Intent(context, nextActivity);
+
+        playbackIntent.putExtra("ACTION",action);
+        playbackIntent.putExtra("name",nameRecord);
+        if(action.equals("PLAY")){
+            context.startService(playbackIntent);
+        } else if (action.equals("STOP") ) {
+            context.stopService(playbackIntent);
+        }
     }
 
 

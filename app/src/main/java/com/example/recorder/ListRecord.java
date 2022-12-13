@@ -44,7 +44,7 @@ public class ListRecord extends Activity {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-//Load danh sach nhac da luu
+        //Load danh sach nhac
         addItem("song1","","");
         addItem("song2","","");
 
@@ -113,7 +113,7 @@ public class ListRecord extends Activity {
     void createRecord(Record record){
         Cursor data = database.GetData("SELECT MAX(id) FROM Records");
         data.moveToNext();
-        int id = data.getInt(0) + 1 ;
+        int id = data.getInt(0) +1;
         database.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(" +
                 String.valueOf(id) +
                 ", '" +
