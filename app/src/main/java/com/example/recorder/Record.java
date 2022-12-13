@@ -1,6 +1,6 @@
 package com.example.recorder;
 
-//ID => int id
+//          ID => int id
 //        Tên => string name
 //        Thời gian ghi(dd/mm/yyyy 11:00) => Date dateSave
 //        Độ dài (00:06:00) => Date length
@@ -21,13 +21,15 @@ public class Record {
     final String modifierSource = "R.raw.";
     final String modifierDate = "2022-12-12";
     final String modifierTime = "00:32:00";
-    public Record(){
+
+    public Record() {
         this.name = "default";
         this.dateSave = modifierDate;
         this.lenght = modifierTime;
         this.source = modifierSource;
     }
-    public Record(String name,String dateSave, String lenght, String source) {
+
+    public Record(String name, String dateSave, String lenght, String source) {
         this.name = name;
         this.dateSave = dateSave;
         this.lenght = lenght;
@@ -45,6 +47,5 @@ public class Record {
         this.lenght = modifierTime;
         this.source = source;
     }
-
 
 }

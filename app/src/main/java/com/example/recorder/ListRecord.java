@@ -1,6 +1,5 @@
 package com.example.recorder;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,18 +18,17 @@ import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
+
     Activity ac = this;
     DataAdapterRCList adapter;
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
     ImageView btn_rc;
-
     List<Record> items = new ArrayList<Record>();
 
     //database
     static InitDatabase database;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +43,11 @@ public class ListRecord extends Activity {
         adapter = new DataAdapterRCList(this, items);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+//Load danh sach nhac da luu
+        addItem("song1","","");
+        addItem("song2","","");
+
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
         btn_rc.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +109,7 @@ public class ListRecord extends Activity {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
     void createRecord(Record record){
         Cursor data = database.GetData("SELECT MAX(id) FROM Records");
         data.moveToNext();
@@ -116,6 +120,7 @@ public class ListRecord extends Activity {
                 record.name +
                 "', datetime('now'), time(datetime('now')))");
     }
+
     void DeleteRecord(int id){
         String query ="DELETE FROM Records where id= '"+ String.valueOf(id) +"'";
         database.QueryData(query);
@@ -125,6 +130,7 @@ public class ListRecord extends Activity {
         Cursor data = database.GetData("SELECT * FROM Records" );
         return data;
     }
+
     Record getRecord(String name) {
         Cursor data = database.GetData("SELECT * FROM Records WHERE name = '" + name.trim() + "'");
         data.moveToNext();
@@ -135,6 +141,7 @@ public class ListRecord extends Activity {
         Record record = new Record(name, date, time, source);
         return  record;
     }
+
     static Record getRecord(int id) {
         Cursor data = database.GetData("SELECT * FROM Records WHERE id = '" + String.valueOf(id) + "'");
         data.moveToNext();
@@ -158,11 +165,6 @@ public class ListRecord extends Activity {
             items.add(record);
         }
     }
-
-
-
-
-
 }
 
 

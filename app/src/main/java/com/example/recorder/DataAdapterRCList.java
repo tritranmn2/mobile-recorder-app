@@ -117,6 +117,7 @@ public class DataAdapterRCList extends BaseAdapter {
                 Context context = v.getContext();
                 switchActivity(context,RecordDetailActivity.class,i);
             }
+
         });
 
         // Trả về view kết quả.
