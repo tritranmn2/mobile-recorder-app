@@ -23,19 +23,14 @@ import java.util.List;
 public class DataAdapterRCList extends BaseAdapter {
 
     private Activity activity;
-//    private List<String> items_title;
-//    private List<String> items_length;
-//    private List<String> items_date;
     private List<Record> records;
-    private ProgressBar[] progressBar;
+//    private ProgressBar[] progressBar;
     private boolean isServiceRunning =false;
+    static public int idOld = -1;
+    static public int idOld2 = -1;
+    static public View viewOld ;
+    public  DataAdapterRCList adapter =this;
 
-//    public DataAdapterRCList(Activity activity, List<String> title, List<String> length, List<String> date) {
-//        this.activity = activity;
-//        this.items_title = title;
-//        this.items_length = length;
-//        this.items_date = date;
-//    }
     public DataAdapterRCList(Activity activity, List<Record> records ) {
         this.activity = activity;
         this.records = records;
@@ -54,6 +49,18 @@ public class DataAdapterRCList extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
+
+
+//    public void updateData(int i) {
+//        if (records.get(i).status.equals("STOP")) {
+//            int a =0;
+//        }
+//       adapter.notifyDataSetChanged();
+//
+//    }
+
+
+
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -78,53 +85,63 @@ public class DataAdapterRCList extends BaseAdapter {
         //set ẩn cái thanh thời gian của từng record
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
         progressBar.setVisibility(View.INVISIBLE);
-
-        //Bật tắt nút play và pasuse
-        ImageView btn_item = (ImageView) view.findViewById(R.id.item_play_btn);
+        ImageView btn_item=(ImageView) view.findViewById(R.id.item_play_btn);
+        if (records.get(i).status.equals("STOP")) {
+            btn_item.setImageResource(R.drawable.playbutton);
+        } else {
+            btn_item.setImageResource(R.drawable.pause);
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         btn_item.setOnClickListener(new View.OnClickListener() {
-//            int flag = 1;
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
 //                Intent playbackIntent = new Intent(context,PlayBackground.class);
                 String ACTION = "";
                 String nameRecord = records.get(i).name;
-                ImageView v1= (ImageView) v;
-                final Bitmap bmapCurrent = ((BitmapDrawable)v1.getDrawable()).getBitmap();
-                Drawable myDrawable = context.getDrawable(R.drawable.playbutton);
-                final Bitmap bmapPlayButton = ((BitmapDrawable) myDrawable).getBitmap();
-                if(bmapCurrent.sameAs(bmapPlayButton)){//chưa phát nhạc
+                if (records.get(i).status.equals("STOP")) {
                     btn_item.setImageResource(R.drawable.pause); //set sang nut pause
-                    ACTION = "PLAY";
-                }else{
-                    btn_item.setImageResource(R.drawable.playbutton);
-                    ACTION = "STOP";
+                    progressBar.setVisibility(View.VISIBLE);
+                    records.get(i).play();//play lan dau tien
+                    if (idOld != -1) {
+                        if (i != idOld) {
+                            records.get(idOld).stop();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                } else if (records.get(i).status.equals("PLAY")) {
+                    if (idOld != -1) {
+                        if (i == idOld) {
+                            btn_item.setImageResource(R.drawable.playbutton);
+                            records.get(i).pause();
+                            idOld2 = idOld;
+                        } else {
+                            records.get(i).stop();
+                        }
+                    }
+                } else if (records.get(i).status.equals("PAUSE")) {
+                    if (idOld2 != -1 && idOld2 == i) {
+                        btn_item.setImageResource(R.drawable.pause);
+                        records.get(i).resume();
+                    }
                 }
-                handleService(context,PlayBackground.class,ACTION,nameRecord);
-//                Bundle extras = new Bundle();
-//                extras.putString("ACTION",ACTION);
-//                extras.putString("name",nameRecord);
-//                playbackIntent.putExtras(extras);
-
-
-//                if (bmap.sameAs(myLogo)) {
-//                    if (isServiceRunning) {
-//                        context.stopService(playbackIntent);
-//                    }
-//                    btn_item.setImageResource(R.drawable.pause);
+                ACTION = records.get(i).status;
+//                ImageView v1= (ImageView) v;
+//                final Bitmap bmapCurrent = ((BitmapDrawable)v1.getDrawable()).getBitmap();
+//                Drawable myDrawable = context.getDrawable(R.drawable.playbutton);
+//                final Bitmap bmapPlayButton = ((BitmapDrawable) myDrawable).getBitmap();
+//                if(bmapCurrent.sameAs(bmapPlayButton)){//chưa phát nhạc
+//                    btn_item.setImageResource(R.drawable.pause); //set sang nut pause
 //                    progressBar.setVisibility(View.VISIBLE);
-//                    playbackIntent = new Intent(context,PlayBackground.class);
+//                    ACTION = "PLAY";
 //
-//                    context.startService(playbackIntent);
-//                    isServiceRunning=true;
-//                } else {
+//                }else{
 //                    btn_item.setImageResource(R.drawable.playbutton);
-//                    progressBar.setVisibility(View.VISIBLE);
-//                    context.stopService(playbackIntent);
+//                    ACTION = "STOP";
 //                }
-//                if()
-
+                handleService(context,PlayBackground.class,ACTION,nameRecord,i);
+                idOld = i;
 
             }
         });
@@ -141,20 +158,27 @@ public class DataAdapterRCList extends BaseAdapter {
         // Trả về view kết quả.
         return view;
     }
+
     public void switchDetailActivity(Context context, Class nextActivity,int id){
         Intent intent = new Intent(context, nextActivity);
         intent.putExtra("id", id);
         context.startActivity(intent);
     }
-    public void handleService(Context context, Class nextActivity,  String action, String nameRecord){
+
+    public void handleService(Context context, Class nextActivity, String action, String nameRecord, int i) {
+
         Intent playbackIntent = new Intent(context, nextActivity);
 
-        playbackIntent.putExtra("ACTION",action);
-        playbackIntent.putExtra("name",nameRecord);
-        if(action.equals("PLAY")){
+        playbackIntent.putExtra("ACTION", action);
+        playbackIntent.putExtra("name", nameRecord);
+        if (action.equals("PLAY") || action.equals("PAUSE") ) {
             context.startService(playbackIntent);
-        } else if (action.equals("STOP") ) {
+        } else if (action.equals("STOP")) {
             context.stopService(playbackIntent);
+//            context.
+        } else if (action.equals("RESUME")) {
+            context.startService(playbackIntent);
+            records.get(i).play();
         }
     }
 

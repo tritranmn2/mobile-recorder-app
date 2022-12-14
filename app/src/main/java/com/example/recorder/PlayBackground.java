@@ -10,11 +10,18 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.sql.Time;
+
 public class PlayBackground extends Service {
     public static String ACTION ;
     static public MediaPlayer player;
     static public String nameResource = "song1";
+    static public int pStart =0;
 
+//    Hàm dùng tạm đến khi có thời gian thật
+//    static public int getDuration(){
+//        return player.getDuration();
+//    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -23,23 +30,9 @@ public class PlayBackground extends Service {
 
     @Override
     public void onCreate() {
-
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
-//        Log.e("playback", "onCreate");
-//        Intent createIntent = "";
-//        Bundle extras = createIntent.getExtras();
-//        if (extras != null) {
-//            ACTION = extras.getString("ACTION");
-//            nameResource = extras.getString("name");
-//        }
-//        if(ACTION == "PLAY"){
-
-            int currentRecord = getResources().getIdentifier(nameResource, "raw",getApplication().getPackageName());
-            player = MediaPlayer.create(getApplicationContext(), currentRecord);
-//            this.onStartCommand(,0,0);
-
-//        }
-
+        int currentRecord = getResources().getIdentifier(nameResource, "raw", getApplication().getPackageName());
+        player = MediaPlayer.create(getApplicationContext(), currentRecord);
     }
 
     @Override
@@ -48,20 +41,28 @@ public class PlayBackground extends Service {
         if (player.isPlaying()) {
             player.stop();
         }
-//        intent = new Intent(this,PlayBackground.class);
         Bundle extras = intent.getExtras();
         if (extras != null) {
             ACTION = extras.getString("ACTION");
             nameResource = extras.getString("name");
         }
+
         if (ACTION.equals("PLAY")) {
             int currentRecord = getResources().getIdentifier(nameResource, "raw", getPackageName());
             player = MediaPlayer.create(getApplicationContext(), currentRecord);
             player.start();
+
         } else if (ACTION.equals("PAUSE")) {
+            pStart=player.getCurrentPosition();
             player.pause();
         } else if (ACTION.equals("STOP") ) {
             player.stop();
+        }else if (ACTION.equals("RESUME") ) {
+            int currentRecord = getResources().getIdentifier(nameResource, "raw", getPackageName());
+            player = MediaPlayer.create(getApplicationContext(), currentRecord);
+            player.seekTo(pStart);
+            player.start();
+
         }
         return Service.START_STICKY;
     }

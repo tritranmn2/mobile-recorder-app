@@ -45,8 +45,8 @@ public class ListRecord extends Activity {
         adapter.notifyDataSetChanged();
 
         //Load danh sach nhac
-        addItem("song1","","");
-        addItem("song2","","");
+        addItem("song1","00:03:04","");
+        addItem("song2","00:03:52","");
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
@@ -99,11 +99,11 @@ public class ListRecord extends Activity {
             fileName = "Record-" + String.valueOf(length);
         }
 
-        Record record = new Record(fileName,source);
+        Record record = new Record(fileName,time_record,source);
 
         createRecord(record);
-        Record recordDb = getRecord(record.name);
 
+        Record recordDb = getRecord(record.name);
         items.add(recordDb);
 
         listView.setAdapter(adapter);
@@ -111,14 +111,7 @@ public class ListRecord extends Activity {
     }
 
     void createRecord(Record record){
-        Cursor data = database.GetData("SELECT MAX(id) FROM Records");
-        data.moveToNext();
-        int id = data.getInt(0) +1;
-        database.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(" +
-                String.valueOf(id) +
-                ", '" +
-                record.name +
-                "', datetime('now'), time(datetime('now')))");
+        database.insertRecord(record);
     }
 
     void DeleteRecord(int id){
@@ -159,9 +152,9 @@ public class ListRecord extends Activity {
             Integer id = data.getInt(0);
             String name = data.getString(1);
             String date = data.getString(2);
-            String time = data.getString(3);
+            String time_record = data.getString(3);
             String source = data.getString(4);
-            Record record = new Record(name, date, time, source);
+            Record record = new Record(name, date, time_record, source);
             items.add(record);
         }
     }

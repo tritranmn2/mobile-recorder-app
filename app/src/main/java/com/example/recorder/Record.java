@@ -17,6 +17,7 @@ public class Record {
 //    Time lenght;
     String dateSave;
     String lenght;
+    String status = "STOP";
     String source;
     final String modifierSource = "R.raw.";
     final String modifierDate = "2022-12-12";
@@ -36,7 +37,7 @@ public class Record {
         this.source = source;
     }
 
-    public Record(String name, String source) {
+    public Record(String name, String lenght, String source) {
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 //        Calendar c = Calendar.getInstance();
 //        String date = sdf.format(c.getTime());
@@ -44,8 +45,20 @@ public class Record {
 //        this.lenght = Time.valueOf(modifierTime);
         this.name = name;
         this.dateSave = modifierDate; //sẽ thay đổi khi xuống dataBase
-        this.lenght = modifierTime;
+        this.lenght = lenght;
         this.source = source;
+    }
+    public void play() {
+        status = "PLAY";
+    }
+    public void pause() {
+        status = "PAUSE";
+    }
+    public void stop() {
+        status = "STOP";
+    }
+    public void resume() {
+        status = "RESUME";
     }
 
 }
