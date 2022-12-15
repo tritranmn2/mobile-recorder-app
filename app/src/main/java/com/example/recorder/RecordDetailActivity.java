@@ -15,39 +15,41 @@ import android.widget.ToggleButton;
 import java.util.List;
 
 public class RecordDetailActivity extends Activity {
-    ImageView btn_back;
-    TextView tvName;
-    TextView tvRcRuntime;
-    ToggleButton btn_play;
-    int id;
-    String ChosenRecord = "song1";
+    ImageView btnBack;
+    ToggleButton btnPlay;
+    TextView tvCurRecordName,tvRecordRuntime;
+    int curRecordId;
+    String curRecordName = "song1";
     public String ACTION = "STOP";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_detail_record);
-        btn_back = (ImageView) findViewById(R.id.return_button);
-        tvName = (TextView) findViewById(R.id.record_name);
-        tvRcRuntime = (TextView) findViewById(R.id.record_runtime);
-        btn_play = (ToggleButton) findViewById(R.id.play_button);
+        btnBack = (ImageView) findViewById(R.id.return_button);
+        tvCurRecordName = (TextView) findViewById(R.id.record_name);
+        tvRecordRuntime = (TextView) findViewById(R.id.record_runtime);
+        btnPlay = (ToggleButton) findViewById(R.id.play_button);
         Bundle extras = getIntent().getExtras(); //lay id truyen tu main qua
-
         if (extras != null) {
-             id = extras.getInt("id");
+            curRecordId = extras.getInt("id");
         }
-        Record record= ListRecord.getRecord(id);
-        ChosenRecord = record.name;
-        tvName.setText(record.name);
-        tvRcRuntime.setText(record.lenght);
-        btn_back.setOnClickListener(new View.OnClickListener() {
+        Record record= ListRecord.getRecord(curRecordId); // khong anh huong toi records goc
+        record.play();
+        ACTION = record.status;
+        curRecordName = record.name;
+        tvCurRecordName.setText(record.name);
+        tvRecordRuntime.setText(record.lenght);
+        Context context = getApplicationContext();
+        handleService(context,PlayBackground.class,ACTION,curRecordName);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
                 switchActivity(context,ListRecord.class);
             }
         });
-        btn_play.setOnClickListener(new View.OnClickListener() {
+        btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
@@ -61,7 +63,7 @@ public class RecordDetailActivity extends Activity {
                     ACTION = "PAUSE";
                     record.pause();
                 }
-                handleService(context,PlayBackground.class,ACTION,ChosenRecord);
+                handleService(context,PlayBackground.class,ACTION,curRecordName);
 
             }
         });
@@ -71,13 +73,13 @@ public class RecordDetailActivity extends Activity {
     protected void onStop() {
         super.onStop();
         Context context = getApplicationContext();
-        handleService(context,PlayBackground.class,"STOP",ChosenRecord);
+        handleService(context,PlayBackground.class,"STOP",curRecordName);
 
     }
 
     public void switchActivity(Context context, Class nextActivity){
         Intent intent = new Intent(context, nextActivity);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);//dong nay quan trong
         startActivityIfNeeded(intent, 0);
     }
     public void handleService(Context context, Class nextActivity, String action, String nameRecord) {

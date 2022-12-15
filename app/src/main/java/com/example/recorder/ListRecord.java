@@ -54,39 +54,34 @@ public class ListRecord extends Activity {
                 String name = "";
                 String time_record = "";
                 String source = "";
-                //do something, set name, time_record, date
                 addItem(name, time_record,source);
             }
         });
     }
 
-    @Override
-    protected void onPause() {
+
+    @Override protected void onPause() {
         Toast.makeText(this, "OnPause 1", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         Toast.makeText(this, "OnResume 1", Toast.LENGTH_SHORT).show();
         super.onResume();
 
     }
 
-    @Override
-    protected void onRestart() {
+    @Override protected void onRestart() {
         Toast.makeText(this, "OnRestart 1", Toast.LENGTH_SHORT).show();
         super.onRestart();
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override protected void onDestroy() {
         Toast.makeText(this, "OnDestroy 1", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 
-    @Override
-    protected void onStop() {
+    @Override protected void onStop() {
         Toast.makeText(this, "OnStop 1", Toast.LENGTH_SHORT).show();
         super.onStop();
     }

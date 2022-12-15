@@ -32,18 +32,16 @@ public class DataAdapterRCList extends BaseAdapter {
         this.activity = activity;
         this.records = records;
     }
-    @Override
-    public int getCount() {
+
+    @Override public int getCount() {
         return records.size();
     }
 
-    @Override
-    public Object getItem(int i) {
-        return records.get(i).name;
+    @Override public Record getItem(int i) {
+        return records.get(i);
     }
 
-    @Override
-    public long getItemId(int i) {
+    @Override public long getItemId(int i) {
         return i;
     }
 
@@ -73,6 +71,9 @@ public class DataAdapterRCList extends BaseAdapter {
         ImageView btn_item=(ImageView) view.findViewById(R.id.item_play_btn);
         if (records.get(i).status.equals("STOP")) {
             btn_item.setImageResource(R.drawable.playbutton);
+        } else if (records.get(i).status.equals("PAUSE")) {
+            btn_item.setImageResource(R.drawable.playbutton);
+            progressBar.setVisibility(View.VISIBLE);
         } else {
             btn_item.setImageResource(R.drawable.pause);
             progressBar.setVisibility(View.VISIBLE);
@@ -111,20 +112,26 @@ public class DataAdapterRCList extends BaseAdapter {
                     }
                 }
                 ACTION = records.get(i).status;
-
                 handleService(context,PlayBackground.class,ACTION,nameRecord,i);
                 idOld = i;
-
             }
         });
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Chỗ này là set cho khi chuyển sang detail thì các item chuyển
+                //về trạng thái stop
+                records.get(i).stop();
+                if (idOld != -1) {
+                    if (records.get(idOld).status.equals("PLAY")) {
+                        records.get(idOld).stop();
+                    }
+                }
+                adapter.notifyDataSetChanged();
                 Context context = v.getContext();
                 switchDetailActivity(context,RecordDetailActivity.class,i);
             }
-
         });
         return view;
     }
@@ -136,7 +143,6 @@ public class DataAdapterRCList extends BaseAdapter {
     }
 
     public void handleService(Context context, Class nextActivity, String action, String nameRecord, int i) {
-
         Intent playbackIntent = new Intent(context, nextActivity);
 
         playbackIntent.putExtra("ACTION", action);
