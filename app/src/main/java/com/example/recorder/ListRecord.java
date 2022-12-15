@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,12 +16,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
-    Activity ac = this;
     DataAdapterRCList adapter;
+    Recording recording;
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
@@ -44,7 +50,7 @@ public class ListRecord extends Activity {
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
-
+        recording = new Recording(this);
         btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,9 +58,9 @@ public class ListRecord extends Activity {
                 String time_record = "";
                 String date = "";
 
-                //do something, set name, time_record, date
+//                do something, set name, time_record, date
 
-                addItem(name, time_record, date);
+//                addItem(name, time_record, date);
 
             }
         });

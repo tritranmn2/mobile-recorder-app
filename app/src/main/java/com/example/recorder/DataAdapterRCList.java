@@ -76,7 +76,7 @@ public class DataAdapterRCList extends BaseAdapter {
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
         progressBar.setVisibility(View.INVISIBLE);
 
-        //Bật tắt nút play và pasuse
+        //Bật tắt nút play và pause
         ImageView btn_item = (ImageView) view.findViewById(R.id.list_item_img);
 
         btn_item.setOnClickListener(new View.OnClickListener() {
