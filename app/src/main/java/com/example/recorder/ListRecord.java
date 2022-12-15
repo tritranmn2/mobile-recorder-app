@@ -22,8 +22,6 @@ public class ListRecord extends Activity {
     Activity ac = this;
     DataAdapterRCList adapter;
     private ListView listView;
-    public ProgressBar progressBar;
-    public ImageView img;
     ImageView btn_rc;
     List<Record> items = new ArrayList<Record>();
 

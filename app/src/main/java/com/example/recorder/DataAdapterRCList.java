@@ -24,11 +24,8 @@ public class DataAdapterRCList extends BaseAdapter {
 
     private Activity activity;
     private List<Record> records;
-//    private ProgressBar[] progressBar;
-    private boolean isServiceRunning =false;
     static public int idOld = -1;
     static public int idOld2 = -1;
-    static public View viewOld ;
     public  DataAdapterRCList adapter =this;
 
     public DataAdapterRCList(Activity activity, List<Record> records ) {
@@ -49,18 +46,6 @@ public class DataAdapterRCList extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
-
-
-//    public void updateData(int i) {
-//        if (records.get(i).status.equals("STOP")) {
-//            int a =0;
-//        }
-//       adapter.notifyDataSetChanged();
-//
-//    }
-
-
-
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -97,7 +82,6 @@ public class DataAdapterRCList extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Context context = v.getContext();
-//                Intent playbackIntent = new Intent(context,PlayBackground.class);
                 String ACTION = "";
                 String nameRecord = records.get(i).name;
                 if (records.get(i).status.equals("STOP")) {
@@ -127,19 +111,7 @@ public class DataAdapterRCList extends BaseAdapter {
                     }
                 }
                 ACTION = records.get(i).status;
-//                ImageView v1= (ImageView) v;
-//                final Bitmap bmapCurrent = ((BitmapDrawable)v1.getDrawable()).getBitmap();
-//                Drawable myDrawable = context.getDrawable(R.drawable.playbutton);
-//                final Bitmap bmapPlayButton = ((BitmapDrawable) myDrawable).getBitmap();
-//                if(bmapCurrent.sameAs(bmapPlayButton)){//chưa phát nhạc
-//                    btn_item.setImageResource(R.drawable.pause); //set sang nut pause
-//                    progressBar.setVisibility(View.VISIBLE);
-//                    ACTION = "PLAY";
-//
-//                }else{
-//                    btn_item.setImageResource(R.drawable.playbutton);
-//                    ACTION = "STOP";
-//                }
+
                 handleService(context,PlayBackground.class,ACTION,nameRecord,i);
                 idOld = i;
 
@@ -154,8 +126,6 @@ public class DataAdapterRCList extends BaseAdapter {
             }
 
         });
-
-        // Trả về view kết quả.
         return view;
     }
 
@@ -175,7 +145,6 @@ public class DataAdapterRCList extends BaseAdapter {
             context.startService(playbackIntent);
         } else if (action.equals("STOP")) {
             context.stopService(playbackIntent);
-//            context.
         } else if (action.equals("RESUME")) {
             context.startService(playbackIntent);
             records.get(i).play();

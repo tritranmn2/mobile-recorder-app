@@ -18,11 +18,6 @@ public class PlayBackground extends Service {
     static public String nameResource = "song1";
     static public int pStart =0;
 
-//    Hàm dùng tạm đến khi có thời gian thật
-//    static public int getDuration(){
-//        return player.getDuration();
-//    }
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -38,13 +33,14 @@ public class PlayBackground extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        if (player.isPlaying()) {
-            player.stop();
-        }
+
         Bundle extras = intent.getExtras();
         if (extras != null) {
             ACTION = extras.getString("ACTION");
             nameResource = extras.getString("name");
+        }
+        if (player.isPlaying() || !ACTION.equals("RESUME")) {
+            player.stop();
         }
 
         if (ACTION.equals("PLAY")) {

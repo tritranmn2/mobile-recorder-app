@@ -1,11 +1,5 @@
 package com.example.recorder;
 
-//          ID => int id
-//        Tên => string name
-//        Thời gian ghi(dd/mm/yyyy 11:00) => Date dateSave
-//        Độ dài (00:06:00) => Date length
-//        File ghi âm =>
-
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -38,11 +32,7 @@ public class Record {
     }
 
     public Record(String name, String lenght, String source) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-//        Calendar c = Calendar.getInstance();
-//        String date = sdf.format(c.getTime());
-//        this.dateSave =  Date.valueOf(date);
-//        this.lenght = Time.valueOf(modifierTime);
+
         this.name = name;
         this.dateSave = modifierDate; //sẽ thay đổi khi xuống dataBase
         this.lenght = lenght;
