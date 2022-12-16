@@ -18,7 +18,7 @@
         tools:targetApi="31">
         <activity
 
-            android:name=".ListRecord"
+            android:name=".Recording"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RecordDetailActivity"/>
+<!--        <activity android:name=".Recording"/>-->
         <service android:name=".PlayBackground"/>
     </application>
 

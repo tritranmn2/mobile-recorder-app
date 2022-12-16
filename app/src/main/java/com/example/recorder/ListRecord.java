@@ -50,7 +50,7 @@ public class ListRecord extends Activity {
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
-        recording = new Recording(this);
+//        recording = new Recording(this);
         btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,6 +59,8 @@ public class ListRecord extends Activity {
                 String date = "";
 
 //                do something, set name, time_record, date
+
+
 
 //                addItem(name, time_record, date);
 
