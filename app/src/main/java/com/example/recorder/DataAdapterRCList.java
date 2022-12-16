@@ -68,6 +68,7 @@ public class DataAdapterRCList extends BaseAdapter {
         //set ẩn cái thanh thời gian của từng record
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
         progressBar.setVisibility(View.INVISIBLE);
+
         ImageView btn_item=(ImageView) view.findViewById(R.id.item_play_btn);
         if (records.get(i).status.equals("STOP")) {
             btn_item.setImageResource(R.drawable.playbutton);
