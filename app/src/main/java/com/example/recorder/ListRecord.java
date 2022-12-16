@@ -24,12 +24,14 @@ import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
+    Activity ac = this;
     DataAdapterRCList adapter;
     Recording recording;
     private ListView listView;
     public ProgressBar progressBar;
     public ImageView img;
     ImageView btn_rc;
+    ImageView btn_search;
     List<String> items_title = new ArrayList<String>();
     List<String> items_length = new ArrayList<String>();
     List<String> items_date = new ArrayList<String>();
@@ -49,8 +51,8 @@ public class ListRecord extends Activity {
         adapter.notifyDataSetChanged();
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
-
-//        recording = new Recording(this);
+        btn_search = (ImageView) findViewById(R.id.search);
+        recording = new Recording(ac);
         btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,12 +62,19 @@ public class ListRecord extends Activity {
 
 //                do something, set name, time_record, date
 
-
+                recording.Record_Stop("TestFile");
 
 //                addItem(name, time_record, date);
 
             }
         });
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recording.Play("TestFile");
+            }
+        });
+
     }
 
     @Override
