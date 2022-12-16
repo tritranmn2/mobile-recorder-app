@@ -66,7 +66,7 @@ public class Recording extends AppCompatActivity{
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
     private Boolean isRecording;
-    private Boolean isPlaying;
+    private static Boolean isPlaying;
     private Integer seconds;
     private String pathRecord;
     private String pathPlay;
@@ -126,7 +126,7 @@ public class Recording extends AppCompatActivity{
         context = activity;
     }
 
-    public void Record_Stop(String nameFile){
+    public  Record Record_Stop(String nameFile){
         if(checkRecordingPermission()){
             if(!isRecording){
                 isRecording = true;
@@ -188,8 +188,6 @@ public class Recording extends AppCompatActivity{
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -203,6 +201,8 @@ public class Recording extends AppCompatActivity{
         else{
             requestRecordingPermission();
         }
+        Record record = new Record(nameFile,"00:00:00",pathRecord);
+        return record;
     }
 
     public void Play(String name){

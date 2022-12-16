@@ -10,14 +10,15 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.sql.Time;
 
 public class PlayBackground extends Service {
     public static String ACTION ;
     static public MediaPlayer player;
-    static public String nameResource = "song1";
+    static public String curSourceRecord = "";
     static public int pStart =0;
-    static public int currentRecord;
+    static public int curIdRecord;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -26,8 +27,10 @@ public class PlayBackground extends Service {
     @Override
     public void onCreate() {
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
-        currentRecord = getResources().getIdentifier(nameResource, "raw", getApplication().getPackageName());
-        player = MediaPlayer.create(getApplicationContext(), currentRecord);
+//        curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getApplication().getPackageName());
+//        player = MediaPlayer.create(getApplicationContext(), curIdRecord);
+        setSourceRecord();
+
     }
 
     @Override
@@ -37,20 +40,22 @@ public class PlayBackground extends Service {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             ACTION = extras.getString("ACTION");
-            nameResource = extras.getString("name");
+            curSourceRecord = extras.getString("source");
         }
         if (player.isPlaying() || !ACTION.equals("RESUME")) {
             player.stop();
         }
         switch (ACTION) {
             case "PLAY":
-                currentRecord = getResources().getIdentifier(nameResource, "raw", getPackageName());
-                player = MediaPlayer.create(getApplicationContext(), currentRecord);
+//                curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getPackageName());
+//                player = MediaPlayer.create(getApplicationContext(), curIdRecord);
+                setSourceRecord();
                 player.start();
                 break;
             case "RESUME":
-                currentRecord = getResources().getIdentifier(nameResource, "raw", getPackageName());
-                player = MediaPlayer.create(getApplicationContext(), currentRecord);
+//                curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getPackageName());
+//                player = MediaPlayer.create(getApplicationContext(), curIdRecord);
+                setSourceRecord();
                 player.seekTo(pStart);
                 player.start();
                 break;
@@ -74,6 +79,14 @@ public class PlayBackground extends Service {
         player.stop();
         player.release();
         player = null;
+    }
+
+    void setSourceRecord() {
+        try {
+            player.setDataSource(curSourceRecord);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

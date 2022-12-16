@@ -34,6 +34,7 @@ public class InitDatabase extends SQLiteOpenHelper {
                 id=0; //ptu dau tien
             }
         }
+
         this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(" +
                 String.valueOf(id) + ", '" + record.name +"', datetime('now'),'" + record.lenght +"')");
     }

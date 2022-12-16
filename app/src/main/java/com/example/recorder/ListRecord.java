@@ -49,8 +49,8 @@ public class ListRecord extends Activity {
         adapter.notifyDataSetChanged();
 
         //Load danh sach nhac
-        addItem("song1","00:03:04","");
-        addItem("song2","00:03:52","");
+//        addItem("song1","00:03:04","");
+//        addItem("song2","00:03:52","");
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
@@ -59,13 +59,15 @@ public class ListRecord extends Activity {
         btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = "";
-                String time_record = "";
-                String source = "";
-                addItem(name, time_record,source);
-                String date = "";
-                recording.Record_Stop("TestFile");
-//                addItem(name, time_record, date);
+                String fileName="";
+                Integer i = items.size() + 1;
+                fileName = "Record-" + String.valueOf(i);
+//                String time_record = "";
+//                String source = "";
+////                addItem(fileName, time_record,source);
+//                String date = "";
+                Record record = recording.Record_Stop(fileName);
+                addItem(record.name, record.lenght, record.source);
 
             }
         });
@@ -99,11 +101,9 @@ public class ListRecord extends Activity {
         super.onStop();
     }
 
-    void addItem(String fileName, String time_record, String source) {
-        if (fileName == ""){
-            Integer length = items.size() + 1;
-            fileName = "Record-" + String.valueOf(length);
-        }
+    void addItem( String fileName,String time_record, String source) {
+//        Integer i = items.size() + 1;
+//        fileName = "Record " + String.valueOf(i);
 
         Record record = new Record(fileName,time_record,source);
 

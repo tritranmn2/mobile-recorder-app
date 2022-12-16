@@ -85,7 +85,7 @@ public class DataAdapterRCList extends BaseAdapter {
             public void onClick(View v) {
                 Context context = v.getContext();
                 String ACTION = "";
-                String nameRecord = records.get(i).name;
+                String sourceRecord = records.get(i).source;
                 if (records.get(i).status.equals("STOP")) {
                     btn_item.setImageResource(R.drawable.pause); //set sang nut pause
                     progressBar.setVisibility(View.VISIBLE);
@@ -113,7 +113,7 @@ public class DataAdapterRCList extends BaseAdapter {
                     }
                 }
                 ACTION = records.get(i).status;
-                handleService(context,PlayBackground.class,ACTION,nameRecord,i);
+                handleService(context,PlayBackground.class,ACTION,sourceRecord,i);
                 idOld = i;
             }
         });
@@ -143,11 +143,11 @@ public class DataAdapterRCList extends BaseAdapter {
         context.startActivity(intent);
     }
 
-    public void handleService(Context context, Class nextActivity, String action, String nameRecord, int i) {
+    public void handleService(Context context, Class nextActivity, String action, String sourceRecord, int i) {
         Intent playbackIntent = new Intent(context, nextActivity);
 
         playbackIntent.putExtra("ACTION", action);
-        playbackIntent.putExtra("name", nameRecord);
+        playbackIntent.putExtra("source", sourceRecord);
         if (action.equals("PLAY") || action.equals("PAUSE") ) {
             context.startService(playbackIntent);
         } else if (action.equals("STOP")) {
