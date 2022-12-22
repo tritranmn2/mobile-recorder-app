@@ -12,6 +12,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -105,6 +108,15 @@ public class ListRecord extends Activity {
 
     void createRecord(Record record){
         database.insertRecord(record);
+
+        NotificationCompat.Builder builder= new NotificationCompat.Builder(ListRecord.this,"record notification");
+        builder.setContentTitle("Add new record");
+        builder.setContentText(record.name +" is added");
+        builder.setSmallIcon(R.drawable.playbutton);
+        builder.setAutoCancel(true);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(ListRecord.this);
+        managerCompat.notify(1,builder.build());
+
     }
 
     void DeleteRecord(int id){

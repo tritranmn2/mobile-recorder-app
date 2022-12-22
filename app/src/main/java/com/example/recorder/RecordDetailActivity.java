@@ -2,15 +2,21 @@ package com.example.recorder;
 
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.List;
 
@@ -52,7 +58,10 @@ public class RecordDetailActivity extends Activity {
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NotificationCompat.Builder builder= new NotificationCompat.Builder(RecordDetailActivity.this,"record notification");
                 Context context = v.getContext();
+                builder.setContentTitle(record.name);
+
                 if (record.status.equals("STOP")) {
                     ACTION = "PLAY";
                     record.play();
@@ -64,7 +73,6 @@ public class RecordDetailActivity extends Activity {
                     record.pause();
                 }
                 handleService(context,PlayBackground.class,ACTION,curRecordName);
-
             }
         });
     }

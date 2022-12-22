@@ -10,6 +10,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import java.sql.Time;
 
 public class PlayBackground extends Service {
@@ -18,6 +21,7 @@ public class PlayBackground extends Service {
     static public String nameResource = "song1";
     static public int pStart =0;
     static public int currentRecord;
+    static public String notifyMsg="Hi";
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -44,26 +48,37 @@ public class PlayBackground extends Service {
         }
         switch (ACTION) {
             case "PLAY":
+                notifyMsg=nameResource+"is playing";
                 currentRecord = getResources().getIdentifier(nameResource, "raw", getPackageName());
                 player = MediaPlayer.create(getApplicationContext(), currentRecord);
                 player.start();
                 break;
             case "RESUME":
+                notifyMsg=nameResource+" is playing";
                 currentRecord = getResources().getIdentifier(nameResource, "raw", getPackageName());
                 player = MediaPlayer.create(getApplicationContext(), currentRecord);
                 player.seekTo(pStart);
                 player.start();
                 break;
             case "STOP":
+                notifyMsg=nameResource+" is stopped";
                 player.stop();
                 break;
             case "PAUSE":
+                notifyMsg=nameResource+" is paused";
                 pStart = player.getCurrentPosition();
                 player.pause();
                 break;
             default:
                 break;
         }
+        NotificationCompat.Builder builder= new NotificationCompat.Builder(PlayBackground.this,"record notification");
+        builder.setContentTitle("Record activity");
+        builder.setContentText(notifyMsg);
+        builder.setSmallIcon(R.drawable.playbutton);
+        builder.setAutoCancel(true);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(PlayBackground.this);
+        managerCompat.notify(1,builder.build());
         return Service.START_STICKY;
     }
 
