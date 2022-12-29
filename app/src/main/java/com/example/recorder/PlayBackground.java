@@ -29,7 +29,7 @@ public class PlayBackground extends Service {
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
 //        curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getApplication().getPackageName());
 //        player = MediaPlayer.create(getApplicationContext(), curIdRecord);
-        setSourceRecord();
+        player =new MediaPlayer();
 
     }
 
@@ -41,8 +41,9 @@ public class PlayBackground extends Service {
         if (extras != null) {
             ACTION = extras.getString("ACTION");
             curSourceRecord = extras.getString("source");
+            Log.e("source:",curSourceRecord);
         }
-        if (player.isPlaying() || !ACTION.equals("RESUME")) {
+        if ( player.isPlaying()) {
             player.stop();
         }
         switch (ACTION) {

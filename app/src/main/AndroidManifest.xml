@@ -16,8 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Recorder"
         tools:targetApi="31">
-        <activity
 
+
+        <activity
             android:name=".ListRecord"
             android:exported="true">
             <intent-filter>
@@ -26,9 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecordDetailActivity"/>
-        <activity android:name=".Recording"/>
-        <service android:name=".PlayBackground"/>
+        <activity android:name=".RecordDetailActivity" /> <!-- <activity android:name=".Recording"/> -->
+        <service android:name=".PlayBackground" />
+        <service
+            android:name=".ServiceRecord"
+            android:enabled="true"
+            android:exported="true" />
+<!--        <receiver android:name=".ListRecord$MyRecordReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter><action android:name = "SendRecord"/></intent-filter>-->
+<!--        </receiver>-->
+
     </application>
 
 </manifest>

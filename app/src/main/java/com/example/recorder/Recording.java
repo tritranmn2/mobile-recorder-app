@@ -3,6 +3,7 @@ package com.example.recorder;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -28,6 +29,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.UserHandle;
 import android.view.Display;
@@ -54,8 +56,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 
-public class Recording extends AppCompatActivity{
-
+public class Recording extends Service {
     private Integer ID;
     private String name;
     private Date dateSave;
@@ -65,8 +66,8 @@ public class Recording extends AppCompatActivity{
     private static final Integer REQUEST_AUDIO_PERMISSION_CODE = 101;
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
-    private Boolean isRecording;
-    private static Boolean isPlaying;
+    public static Boolean isRecording;
+    public static Boolean isPlaying;
     private Integer seconds;
     private String pathRecord;
     private String pathPlay;
@@ -77,14 +78,34 @@ public class Recording extends AppCompatActivity{
     private Context context;
     ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    @Override
-    protected void onCreate (Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        System.out.println(context);
+//    @Override
+//    protected void onCreate (Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        System.out.println(context);
+//
+//        context = getApplicationContext();
+//        System.out.println(context);
+//    }
 
-        context = getApplicationContext();
-        System.out.println(context);
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        super.onStartCommand(intent, flags, startId);
+//
+//
+//
+//    }
 
     public Recording(){
         ID = 0;
@@ -126,84 +147,86 @@ public class Recording extends AppCompatActivity{
         context = activity;
     }
 
-    public  Record Record_Stop(String nameFile){
-        if(checkRecordingPermission()){
-            if(!isRecording){
-                isRecording = true;
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        pathRecord = getRecordingFilePath(nameFile);
-                        System.out.println(pathRecord);
-                        mediaRecorder = new MediaRecorder();
-                        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                        mediaRecorder.setOutputFile(pathRecord);
-                        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                        try {
-                            mediaRecorder.prepare();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        mediaRecorder.start();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                playableSeconds = 0;
-                                seconds = 0;
-                                dummySeconds = 0;
-                                runTimer();
-                            }
-                        });
-
-                    }
-                });
-            }
-            else {
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        mediaRecorder.stop();
-                        mediaRecorder.release();
-                        mediaRecorder = null;
-                        playableSeconds = seconds;
-                        dummySeconds = seconds;
-                        seconds = 0;
-                        isRecording = false;
-
-                        source = pathRecord;
-                        name = nameFile;
-                        dateSave = new Date();
-                        ID = 1; //ko biết tạo ID
-                        length = new Date();
-                        DateFormat dateFormat = null;
-                        dateFormat = new SimpleDateFormat("HH:mm:ss");
-                        Integer hours = dummySeconds/3600;
-                        Integer minutes = (dummySeconds % 3600)/60;
-                        Integer secs = dummySeconds % 60;
-                        String format = hours.toString() + ":" + minutes.toString() + ":" + secs.toString();
-                        try {
-                            length =  dateFormat.parse(format);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                handler.removeCallbacksAndMessages(null);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-        else{
+    public  Record beginRecord(String nameFile){
+        if(!checkRecordingPermission()){
             requestRecordingPermission();
         }
-        Record record = new Record(nameFile,"00:00:00",pathRecord);
+        if(isRecording == false){
+            isRecording = true;
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    pathRecord = getRecordingFilePath(nameFile);
+                    System.out.println(pathRecord);
+                    mediaRecorder = new MediaRecorder();
+                    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                    mediaRecorder.setOutputFile(pathRecord);
+                    mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+                    try {
+                        mediaRecorder.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    mediaRecorder.start();
+//                    activity.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            playableSeconds = 0;
+//                            seconds = 0;
+//                            dummySeconds = 0;
+//                            runTimer();
+//                        }
+//                    });
+
+                }
+            });
+        }else {
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    mediaRecorder.stop();
+                    mediaRecorder.release();
+                    mediaRecorder = null;
+                    playableSeconds = seconds;
+                    dummySeconds = seconds;
+                    seconds = 0;
+                    isRecording = false;
+
+                    source = pathRecord;
+                    name = nameFile;
+                    dateSave = new Date();
+                    ID = 1; //ko biết tạo ID
+                    length = new Date();
+                    DateFormat dateFormat = null;
+                    dateFormat = new SimpleDateFormat("HH:mm:ss");
+                    Integer hours = dummySeconds/3600;
+                    Integer minutes = (dummySeconds % 3600)/60;
+                    Integer secs = dummySeconds % 60;
+                    String format = hours.toString() + ":" + minutes.toString() + ":" + secs.toString();
+                    try {
+                        length =  dateFormat.parse(format);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+//
+//                activity.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        handler.removeCallbacksAndMessages(null);
+//                    }
+//                });
+                }
+            });
+
+        }
+        Record record = new Record(nameFile,length.toString(),pathRecord);
         return record;
+
     }
+
 
     public void Play(String name){
         pathPlay = getRecordingFilePath(name);
@@ -253,23 +276,23 @@ public class Recording extends AppCompatActivity{
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==REQUEST_AUDIO_PERMISSION_CODE){
-            if(grantResults.length>0){
-                Boolean permissionToRecord = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                if(permissionToRecord){
-                    System.out.println("Permission Given");
-                    Toast.makeText(context,"Permission Given", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    System.out.println("Permission Denied");
-                    Toast.makeText(context,"Permission Denied", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if(requestCode==REQUEST_AUDIO_PERMISSION_CODE){
+//            if(grantResults.length>0){
+//                Boolean permissionToRecord = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//                if(permissionToRecord){
+//                    System.out.println("Permission Given");
+//                    Toast.makeText(context,"Permission Given", Toast.LENGTH_SHORT).show();
+//                }
+//                else {
+//                    System.out.println("Permission Denied");
+//                    Toast.makeText(context,"Permission Denied", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    }
 
     private String getRecordingFilePath(String name){
         ContextWrapper contextWrapper = new ContextWrapper(context);

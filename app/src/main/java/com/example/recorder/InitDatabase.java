@@ -35,8 +35,9 @@ public class InitDatabase extends SQLiteOpenHelper {
             }
         }
 
-        this.QueryData("INSERT INTO Records(id, name, dateSave, length) VALUES(" +
-                String.valueOf(id) + ", '" + record.name +"', datetime('now'),'" + record.lenght +"')");
+        this.QueryData("INSERT INTO Records(id, name, dateSave, length,source) VALUES(" +
+                String.valueOf(id) + ", '" + record.name +"', datetime('now'),'" + record.lenght +"','" +
+                record.source+"')");
     }
 
 

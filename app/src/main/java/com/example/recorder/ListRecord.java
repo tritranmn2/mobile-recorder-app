@@ -1,8 +1,12 @@
 package com.example.recorder;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,12 +31,15 @@ import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
-
-    Activity ac = this;
-    DataAdapterRCList adapter;
+    private static final Integer REQUEST_AUDIO_PERMISSION_CODE = 101;
     Recording recording;
+    DataAdapterRCList adapter;
     private ListView listView;
     ImageView btn_rc;
+    public static boolean isRecording = false;
+    public static BroadcastReceiver receiver;
+    public static Intent intentServiceRecord;
+
     List<Record> items = new ArrayList<Record>();
 
     //database
@@ -53,24 +64,35 @@ public class ListRecord extends Activity {
 //        addItem("song2","00:03:52","");
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
+//        btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
-        btn_rc = (ImageView) findViewById(R.id.btn_rc);
-        recording = new Recording(ac);
+
+        intentServiceRecord = new Intent(this, ServiceRecord.class);
+        IntentFilter mainFilter = new IntentFilter("SendRecord");
+        receiver = new MyRecordReceiver();
+        registerReceiver(receiver, mainFilter);
+
         btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String fileName="";
-                Integer i = items.size() + 1;
-                fileName = "Record-" + String.valueOf(i);
-//                String time_record = "";
-//                String source = "";
-////                addItem(fileName, time_record,source);
-//                String date = "";
-                Record record = recording.Record_Stop(fileName);
-                addItem(record.name, record.lenght, record.source);
+                String fileName = "";
+                Integer size = items.size() + 1;
+                fileName = "Record-" + String.valueOf(size);
 
+                if (isRecording == false) {
+                    if (!checkRecordingPermission()) {
+                        requestRecordingPermission();
+                    }
+                    isRecording=true;
+                    intentServiceRecord.putExtra("nameFile",fileName);
+                    startService(intentServiceRecord);
+                } else {
+                    isRecording=false;
+                    stopService(intentServiceRecord);
+                }
             }
         });
+
 
     }
 
@@ -101,13 +123,14 @@ public class ListRecord extends Activity {
         super.onStop();
     }
 
-    void addItem( String fileName,String time_record, String source) {
+    public void addItem( String fileName,String time_record, String source) {
 //        Integer i = items.size() + 1;
 //        fileName = "Record " + String.valueOf(i);
 
         Record record = new Record(fileName,time_record,source);
 
-        createRecord(record);
+        database.insertRecord(record);
+//        createRecord(record);
 
         Record recordDb = getRecord(record.name);
         items.add(recordDb);
@@ -116,9 +139,7 @@ public class ListRecord extends Activity {
         adapter.notifyDataSetChanged();
     }
 
-    void createRecord(Record record){
-        database.insertRecord(record);
-    }
+
 
     void DeleteRecord(int id){
         String query ="DELETE FROM Records where id= '"+ String.valueOf(id) +"'";
@@ -162,6 +183,46 @@ public class ListRecord extends Activity {
             String source = data.getString(4);
             Record record = new Record(name, date, time_record, source);
             items.add(record);
+        }
+    }
+
+    public  class MyRecordReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String name = intent.getStringExtra("name");
+            String date = intent.getStringExtra("date");
+            String length = intent.getStringExtra("length");
+            String source = intent.getStringExtra("source");
+            addItem(name,length,source);
+        }
+    }
+
+    private void requestRecordingPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},REQUEST_AUDIO_PERMISSION_CODE);
+    }
+
+    public Boolean checkRecordingPermission(){
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED){
+            requestRecordingPermission();
+            return false;
+        }
+        return true;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_AUDIO_PERMISSION_CODE){
+            if(grantResults.length>0){
+                Boolean permissionToRecord = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if(permissionToRecord){
+                    System.out.println("Permission Given");
+                    Toast.makeText(this,"Permission Given", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    System.out.println("Permission Denied");
+                    Toast.makeText(this,"Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
