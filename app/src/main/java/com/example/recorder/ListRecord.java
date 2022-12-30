@@ -38,7 +38,6 @@ public class ListRecord extends Activity {
     ImageView btn_rc;
     public static boolean isRecording = false;
     public static BroadcastReceiver receiver;
-    public static Intent intentServiceRecord;
 
     List<Record> items = new ArrayList<Record>();
 
@@ -67,7 +66,6 @@ public class ListRecord extends Activity {
 //        btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
 
-        intentServiceRecord = new Intent(this, ServiceRecord.class);
         IntentFilter mainFilter = new IntentFilter("SendRecord");
         receiver = new MyRecordReceiver();
         registerReceiver(receiver, mainFilter);
@@ -77,6 +75,8 @@ public class ListRecord extends Activity {
             public void onClick(View view) {
                 String fileName = "";
                 Integer size = items.size() + 1;
+                Context context = getApplicationContext();
+                Intent intentServiceRecord = new Intent(context, ServiceRecord.class);
                 fileName = "Record-" + String.valueOf(size);
 
                 if (isRecording == false) {
@@ -85,10 +85,10 @@ public class ListRecord extends Activity {
                     }
                     isRecording=true;
                     intentServiceRecord.putExtra("nameFile",fileName);
-                    startService(intentServiceRecord);
+                    context.startService(intentServiceRecord);
                 } else {
                     isRecording=false;
-                    stopService(intentServiceRecord);
+                    context.stopService(intentServiceRecord);
                 }
             }
         });

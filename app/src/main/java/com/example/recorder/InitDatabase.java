@@ -13,7 +13,6 @@ public class InitDatabase extends SQLiteOpenHelper {
         super(context, name, factory, version);
         this.QueryData("DROP TABLE IF EXISTS Records");
         this.QueryData("CREATE TABLE IF NOT EXISTS Records(id INT, name VARCHAR(255), dateSave TEXT, length TEXT,source TEXT)");
-
     }
 
     public void QueryData(String sql) {

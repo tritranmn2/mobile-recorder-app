@@ -1,5 +1,7 @@
 package com.example.recorder;
 
+import static androidx.core.app.ActivityCompat.requestPermissions;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
@@ -265,7 +267,7 @@ public class Recording extends Service {
 
 
     private void requestRecordingPermission(){
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO},REQUEST_AUDIO_PERMISSION_CODE);
+        requestPermissions(activity, new String[]{Manifest.permission.RECORD_AUDIO},REQUEST_AUDIO_PERMISSION_CODE);
     }
 
     public Boolean checkRecordingPermission(){
