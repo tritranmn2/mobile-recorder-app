@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -26,7 +27,7 @@ import java.io.IOException;
 public class ServiceRecord extends Service {
     private String nameFile;
     private String pathRecord;
-    private static MediaRecorder mediaRecorder;
+    private static MediaRecorder mediaRecorder = new MediaRecorder();;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,6 +37,8 @@ public class ServiceRecord extends Service {
 
     @Override
     public void onCreate() {
+        Toast.makeText(this, "Record onCreate", Toast.LENGTH_SHORT).show();
+
         super.onCreate();
 
     }
@@ -51,6 +54,8 @@ public class ServiceRecord extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(this, "Record onStartCommand", Toast.LENGTH_SHORT).show();
+
         super.onStartCommand(intent, flags, startId);
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -62,8 +67,6 @@ public class ServiceRecord extends Service {
             public void run() {
 
                 pathRecord = getRecordingFilePath(nameFile);
-                System.out.println(pathRecord);
-                mediaRecorder = new MediaRecorder();
                 mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                 mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
                 mediaRecorder.setOutputFile(pathRecord);
@@ -77,30 +80,35 @@ public class ServiceRecord extends Service {
             }
         });
         threadRecorder.start();
+//        pathRecord = getRecordingFilePath(nameFile);
+//        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+//        mediaRecorder.setOutputFile(pathRecord);
+//        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+//        try {
+//            mediaRecorder.prepare();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        mediaRecorder.start();
         return Service.START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        Toast.makeText(this, "Record onDestroy", Toast.LENGTH_SHORT).show();
+
         super.onDestroy();
         mediaRecorder.stop();
         String name = nameFile;
         String date = "mm-dd-yyyy";
         String length = "00:05:11";
-
-
         Intent intentSendInfor = new Intent("SendRecord");
         intentSendInfor.putExtra("name",name);
         intentSendInfor.putExtra("date",date);
         intentSendInfor.putExtra("length",length);
         intentSendInfor.putExtra("source",pathRecord);
         sendBroadcast(intentSendInfor);
-
-
-        mediaRecorder.release();
-        mediaRecorder = null;
-
-
     }
 
     private String getRecordingFilePath(String name){
@@ -109,6 +117,7 @@ public class ServiceRecord extends Service {
         File music = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
         File file = new File(music, name + ".mp3");
         return file.getPath();
+
     }
 
 }

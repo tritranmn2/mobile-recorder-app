@@ -15,7 +15,7 @@ import java.sql.Time;
 
 public class PlayBackground extends Service {
     public static String ACTION ;
-    static public MediaPlayer player;
+    static public MediaPlayer player =new MediaPlayer() ;
     static public String curSourceRecord = "";
     static public int pStart =0;
     static public int curIdRecord;
@@ -26,10 +26,10 @@ public class PlayBackground extends Service {
 
     @Override
     public void onCreate() {
+        super.onCreate();
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
 //        curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getApplication().getPackageName());
 //        player = MediaPlayer.create(getApplicationContext(), curIdRecord);
-        player =new MediaPlayer();
 
     }
 
@@ -41,9 +41,8 @@ public class PlayBackground extends Service {
         if (extras != null) {
             ACTION = extras.getString("ACTION");
             curSourceRecord = extras.getString("source");
-            Log.e("source:",curSourceRecord);
         }
-        if ( player.isPlaying()) {
+        if ( player.isPlaying() && !ACTION.equals("RESUME")) {
             player.stop();
         }
         switch (ACTION) {
@@ -76,15 +75,20 @@ public class PlayBackground extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, "playback Destroy", Toast.LENGTH_SHORT).show();
-//        Log.e("playback", "onDestroy");
         player.stop();
-        player.release();
-        player = null;
+//        player.release();
+//        player = null;
     }
 
     void setSourceRecord() {
         try {
+            System.out.println(curSourceRecord);
             player.setDataSource(curSourceRecord);
+            try {
+                player.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
