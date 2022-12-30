@@ -50,7 +50,23 @@ public class ServiceRecord extends Service {
             Log.e("Handler record Service",  (String)msg.obj);
         }
     };
+    public Thread threadRecorder = new Thread(new Runnable() {
+        @Override
+        public void run() {
 
+            pathRecord = getRecordingFilePath(nameFile);
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mediaRecorder.setOutputFile(pathRecord);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            try {
+                mediaRecorder.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaRecorder.start();
+        }
+    });
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -59,38 +75,10 @@ public class ServiceRecord extends Service {
         super.onStartCommand(intent, flags, startId);
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
             this.nameFile = extras.getString("nameFile");
         }
-        Thread threadRecorder = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                pathRecord = getRecordingFilePath(nameFile);
-                mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                mediaRecorder.setOutputFile(pathRecord);
-                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-                try {
-                    mediaRecorder.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mediaRecorder.start();
-            }
-        });
         threadRecorder.start();
-//        pathRecord = getRecordingFilePath(nameFile);
-//        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-//        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-//        mediaRecorder.setOutputFile(pathRecord);
-//        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-//        try {
-//            mediaRecorder.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        mediaRecorder.start();
+
         return Service.START_STICKY;
     }
 

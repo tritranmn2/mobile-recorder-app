@@ -19,7 +19,7 @@ public class RecordDetailActivity extends Activity {
     ToggleButton btnPlay;
     TextView tvCurRecordName,tvRecordRuntime;
     int curRecordId;
-    String curRecordName = "song1";
+    String curRecordSource;
     public String ACTION = "STOP";
 
     @Override
@@ -37,11 +37,11 @@ public class RecordDetailActivity extends Activity {
         Record record= ListRecord.getRecord(curRecordId); // khong anh huong toi records goc
         record.play();
         ACTION = record.status;
-        curRecordName = record.name;
+        curRecordSource = record.source;
         tvCurRecordName.setText(record.name);
         tvRecordRuntime.setText(record.lenght);
         Context context = getApplicationContext();
-        handleService(context,PlayBackground.class,ACTION,curRecordName);
+        handleService(context,PlayBackground.class,ACTION,curRecordSource);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +63,7 @@ public class RecordDetailActivity extends Activity {
                     ACTION = "PAUSE";
                     record.pause();
                 }
-                handleService(context,PlayBackground.class,ACTION,curRecordName);
+                handleService(context,PlayBackground.class,ACTION,curRecordSource);
 
             }
         });
@@ -73,7 +73,7 @@ public class RecordDetailActivity extends Activity {
     protected void onStop() {
         super.onStop();
         Context context = getApplicationContext();
-        handleService(context,PlayBackground.class,"STOP",curRecordName);
+        handleService(context,PlayBackground.class,"STOP",curRecordSource);
 
     }
 
@@ -87,7 +87,7 @@ public class RecordDetailActivity extends Activity {
         Intent playbackIntent = new Intent(context, nextActivity);
 
         playbackIntent.putExtra("ACTION", action);
-        playbackIntent.putExtra("name", nameRecord);
+        playbackIntent.putExtra("source", nameRecord);
         if (action.equals("PLAY") || action.equals("PAUSE") ) {
             context.startService(playbackIntent);
         } else if (action.equals("STOP")) {

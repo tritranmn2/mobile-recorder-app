@@ -30,11 +30,12 @@ public class PlayBackground extends Service {
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
 //        curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getApplication().getPackageName());
 //        player = MediaPlayer.create(getApplicationContext(), curIdRecord);
-
+//        setSourceRecord();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(this, "playback onStartCm", Toast.LENGTH_SHORT).show();
         super.onStartCommand(intent, flags, startId);
 
         Bundle extras = intent.getExtras();
@@ -83,6 +84,7 @@ public class PlayBackground extends Service {
     void setSourceRecord() {
         try {
             System.out.println(curSourceRecord);
+            player =new MediaPlayer() ;
             player.setDataSource(curSourceRecord);
             try {
                 player.prepare();
