@@ -2,12 +2,15 @@ package com.example.recorder;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -19,6 +22,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -59,8 +64,8 @@ public class ListRecord extends Activity {
         adapter.notifyDataSetChanged();
 
         //Load danh sach nhac
-//        addItem("song1","00:03:04","");
-//        addItem("song2","00:03:52","");
+        addItem("song1","00:03:04","");
+        addItem("song2","00:03:52","");
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
 //        btn_rc = (ImageView) findViewById(R.id.btn_rc);
@@ -69,6 +74,12 @@ public class ListRecord extends Activity {
         IntentFilter mainFilter = new IntentFilter("SendRecord");
         receiver = new MyRecordReceiver();
         registerReceiver(receiver, mainFilter);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("record notification","record notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
 
         btn_rc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +148,15 @@ public class ListRecord extends Activity {
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        NotificationCompat.Builder builder= new NotificationCompat.Builder(ListRecord.this,"record notification");
+        builder.setContentTitle("Add new record");
+        builder.setContentText(record.name +" is added");
+        builder.setSmallIcon(R.drawable.playbutton);
+        builder.setAutoCancel(true);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(ListRecord.this);
+        managerCompat.notify(1,builder.build());
+
     }
 
 
