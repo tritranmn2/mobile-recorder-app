@@ -27,33 +27,46 @@ import java.io.IOException;
 public class ServiceRecord extends Service {
     private String nameFile;
     private String pathRecord;
-    private static MediaRecorder mediaRecorder = new MediaRecorder();;
-
-    @Override
-    public IBinder onBind(Intent intent) {
+    private static MediaRecorder mediaRecorder = new MediaRecorder();
+    private static int totalSeconds=0;
+    private static boolean isRecording = false;
+    @Override public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         Toast.makeText(this, "Record onCreate", Toast.LENGTH_SHORT).show();
-
         super.onCreate();
 
     }
+
     @SuppressLint("HandlerLeak")
+//    Handler handler =new Handler();
     Handler handler =new Handler(){
         @Override
-        public void handleMessage(@NonNull Message msg) {
+        public void handleMessage( Message msg) {
             super.handleMessage(msg);
-            Log.e("Handler record Service",  (String)msg.obj);
+            System.out.println("handler:"+(String)msg.obj);
+//            send cho broast cast reciever để in setText cho textView
+
         }
     };
-    public Thread threadRecorder = new Thread(new Runnable() {
-        @Override
-        public void run() {
-
+    public class CountTimeRunnable implements Runnable {
+        @Override public void run() {
+            if(!isRecording)return;
+            totalSeconds++;
+            MyTime myTime = new MyTime(totalSeconds);
+//            System.out.println(myTime.toString());
+            Message msg= handler.obtainMessage(1,myTime.toString());
+            handler.sendMessage(msg);
+            handler.postDelayed(this,1000);
+        }
+    }
+    public Runnable countTimeRunnable = new CountTimeRunnable();
+//    public Thread threadCountTime = new Thread(countTimeRunnable);
+    public class RecorderRunnable implements Runnable {
+        @Override public void run() {
             pathRecord = getRecordingFilePath(nameFile);
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -65,8 +78,11 @@ public class ServiceRecord extends Service {
                 e.printStackTrace();
             }
             mediaRecorder.start();
+            handler.post(countTimeRunnable);
         }
-    });
+    }
+    public Thread threadRecorder = new Thread(new RecorderRunnable());
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -77,8 +93,9 @@ public class ServiceRecord extends Service {
         if (extras != null) {
             this.nameFile = extras.getString("nameFile");
         }
+        isRecording =true;
         threadRecorder.start();
-
+//        threadCountTime.start();
         return Service.START_STICKY;
     }
 
@@ -88,9 +105,10 @@ public class ServiceRecord extends Service {
 
         super.onDestroy();
         mediaRecorder.stop();
+        isRecording=false;
         String name = nameFile;
         String date = "mm-dd-yyyy";
-        String length = "00:05:11";
+        String length = (new MyTime(totalSeconds).toString());
         Intent intentSendInfor = new Intent("SendRecord");
         intentSendInfor.putExtra("name",name);
         intentSendInfor.putExtra("date",date);

@@ -77,6 +77,7 @@ public class PlayBackground extends Service {
     public void onDestroy() {
         Toast.makeText(this, "playback Destroy", Toast.LENGTH_SHORT).show();
         player.stop();
+        //Có 2 dòng này là lỗi
 //        player.release();
 //        player = null;
     }
@@ -87,7 +88,7 @@ public class PlayBackground extends Service {
             player =new MediaPlayer() ;
             player.setDataSource(curSourceRecord);
             try {
-                player.prepare();
+                player.prepare();//thiếu dòng này là lỗi
             } catch (IOException e) {
                 e.printStackTrace();
             }

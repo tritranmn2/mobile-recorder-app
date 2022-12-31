@@ -12,8 +12,8 @@ public class MyTime {
         this.second = seconds % 60;
     }
     public String toString() {
-        return String.valueOf(this.hour) + ":" + String.valueOf(this.minute) + ":" +
-                String.valueOf(this.second);
+        return MyTime.valueOf(this.hour) + ":" + MyTime.valueOf(this.minute) + ":" +
+                MyTime.valueOf(this.second);
     }
 
 
@@ -25,9 +25,15 @@ public class MyTime {
         seconds += 1;
         return new MyTime(seconds);
     }
+//    this function doesn't test yet
     public static MyTime valueOf(String strTime) {
         Time t = Time.valueOf(strTime);
         int secs = t.getHours() * 3600 + t.getMinutes() * 60 + t.getSeconds();
         return  new MyTime(secs) ;
+    }
+
+    public static String valueOf(int number) {
+        if(number<10) return "0"+String.valueOf(number);
+        return String.valueOf(number);
     }
 }
