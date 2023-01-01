@@ -33,8 +33,8 @@ public class PlayBackground extends Service {
         public void handleMessage( Message msg) {
             super.handleMessage(msg);
             int curTime =(int)msg.obj;
-            System.out.println("handle Play:" + String.valueOf(curTime));
-            Intent intentSendCurTimePlay = new Intent("SendCurTimePlay");
+            System.out.println("handle Play" + String.valueOf(curIdRecord)+":" + String.valueOf(curTime));
+            Intent intentSendCurTimePlay = new Intent("SendCurTimePlay-"+ String.valueOf(curIdRecord));
             intentSendCurTimePlay.putExtra("curTime",curTime);
             sendBroadcast(intentSendCurTimePlay);
         }
@@ -59,6 +59,7 @@ public class PlayBackground extends Service {
         if (extras != null) {
             ACTION = extras.getString("ACTION");
             curSourceRecord = extras.getString("source");
+            curIdRecord = extras.getInt("id");
         }
         if ( player.isPlaying() && !ACTION.equals("RESUME")) {
             player.stop();
@@ -77,6 +78,8 @@ public class PlayBackground extends Service {
                 setSourceRecord();
                 player.seekTo(pStart);
                 player.start();
+                handler.post(curTimeRunnable);
+
                 break;
             case "STOP":
                 player.stop();
