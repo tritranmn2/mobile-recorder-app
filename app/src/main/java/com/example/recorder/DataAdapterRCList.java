@@ -72,7 +72,7 @@ public class DataAdapterRCList extends BaseAdapter {
                     case "SendCurTimePlay":
                         int curTime = intent.getIntExtra("curTime",0);
                         sbCurTime.setProgress(curTime + 1);
-                        System.out.println("reciever:"+ String.valueOf(curTime));
+                        System.out.println("reciever:"+ String.valueOf(curTime+1));
                         break;
                     default:
                         break;

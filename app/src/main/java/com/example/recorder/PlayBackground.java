@@ -124,16 +124,20 @@ public class PlayBackground extends Service {
 //        Log.e("playback", "onStart");
 //        player.start();
 //    }
+    public int last=0;
     public class CurTimeRunnable implements Runnable {
         @Override public void run() {
             if (!player.isPlaying()) {
-                curTime +=1;
-                Message msg= handler.obtainMessage(1,curTime);
+                if(last==1)return;
+                last=1;
+                int lastTime =curTime+1;
+                Message msg= handler.obtainMessage(1,lastTime);
                 handler.sendMessage(msg);
                 handler.postDelayed(this,1000);
 //                handler.removeCallbacksAndMessages(null);
                 return;
             }
+            last=0;
             curTime = player.getCurrentPosition()/1000;
             Message msg= handler.obtainMessage(1,curTime);
             handler.sendMessage(msg);
