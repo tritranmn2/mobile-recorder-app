@@ -134,7 +134,6 @@ public class PlayBackground extends Service {
 //                handler.removeCallbacksAndMessages(null);
                 return;
             }
-
             curTime = player.getCurrentPosition()/1000;
             Message msg= handler.obtainMessage(1,curTime);
             handler.sendMessage(msg);
