@@ -23,7 +23,6 @@ public class PlayBackground extends Service {
     static public int pStart =0;
     static public int curIdRecord;
     static public int curTime;
-    static public Thread threadCurTime;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -34,16 +33,20 @@ public class PlayBackground extends Service {
         public void handleMessage( Message msg) {
             super.handleMessage(msg);
             int curTime =(int)msg.obj;
+            System.out.println("handle Play:" + String.valueOf(curTime));
             Intent intentSendCurTimePlay = new Intent("SendCurTimePlay");
             intentSendCurTimePlay.putExtra("curTime",curTime);
             sendBroadcast(intentSendCurTimePlay);
         }
     };
+    public Runnable curTimeRunnable = new CurTimeRunnable() ;
+    public Thread threadCurTime = new Thread(curTimeRunnable);
 
     @Override
     public void onCreate() {
         super.onCreate();
-        threadCurTime = new Thread(new CurTimeRunnable());
+        curTime=0;
+//        threadCurTime.start();
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
     }
 
@@ -65,8 +68,8 @@ public class PlayBackground extends Service {
 //                curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getPackageName());
 //                player = MediaPlayer.create(getApplicationContext(), curIdRecord);
                 setSourceRecord();
+                handler.post(curTimeRunnable);
                 player.start();
-                threadCurTime.start();
                 break;
             case "RESUME":
 //                curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getPackageName());
@@ -123,7 +126,15 @@ public class PlayBackground extends Service {
 //    }
     public class CurTimeRunnable implements Runnable {
         @Override public void run() {
-            if(!player.isPlaying())return;
+            if (!player.isPlaying()) {
+                curTime +=1;
+                Message msg= handler.obtainMessage(1,curTime);
+                handler.sendMessage(msg);
+                handler.postDelayed(this,1000);
+//                handler.removeCallbacksAndMessages(null);
+                return;
+            }
+
             curTime = player.getCurrentPosition()/1000;
             Message msg= handler.obtainMessage(1,curTime);
             handler.sendMessage(msg);

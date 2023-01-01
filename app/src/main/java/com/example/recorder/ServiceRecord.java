@@ -115,6 +115,7 @@ public class ServiceRecord extends Service {
         intentSendInfor.putExtra("length",length);
         intentSendInfor.putExtra("source",pathRecord);
         sendBroadcast(intentSendInfor);
+        totalSeconds=0;
     }
 
     private String getRecordingFilePath(String name){
