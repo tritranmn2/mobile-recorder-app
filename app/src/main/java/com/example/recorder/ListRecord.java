@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -31,7 +32,7 @@ import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
-    private static final Integer REQUEST_AUDIO_PERMISSION_CODE = 101;
+    private static final Integer REQUEST_AUDIO_PERMISSION_CODE = 200;
     Recording recording;
     DataAdapterRCList adapter;
     private ListView listView;
@@ -58,14 +59,9 @@ public class ListRecord extends Activity {
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        //Load danh sach nhac
-//        addItem("song1","00:03:04","");
-//        addItem("song2","00:03:52","");
-
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
-//        btn_rc = (ImageView) findViewById(R.id.btn_rc);
 
-
+//        register
         IntentFilter mainFilter = new IntentFilter("SendRecord");
         receiver = new MyRecordReceiver();
         registerReceiver(receiver, mainFilter);
@@ -82,6 +78,7 @@ public class ListRecord extends Activity {
                 if (isRecording == false) {
                     if (!checkRecordingPermission()) {
                         requestRecordingPermission();
+                        return;
                     }
                     isRecording=true;
                     intentServiceRecord.putExtra("nameFile",fileName);
@@ -124,28 +121,18 @@ public class ListRecord extends Activity {
     }
 
     public void addItem( String fileName,String time_record, String source) {
-//        Integer i = items.size() + 1;
-//        fileName = "Record " + String.valueOf(i);
-
         Record record = new Record(fileName,time_record,source);
-
         database.insertRecord(record);
-//        createRecord(record);
-
         Record recordDb = getRecord(record.name);
         items.add(recordDb);
-
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
-
 
     void DeleteRecord(int id){
         String query ="DELETE FROM Records where id= '"+ String.valueOf(id) +"'";
         database.QueryData(query);
     }
-
     Cursor getAllRecords() {
         Cursor data = database.GetData("SELECT * FROM Records" );
         return data;

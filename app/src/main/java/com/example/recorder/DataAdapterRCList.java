@@ -2,19 +2,17 @@ package com.example.recorder;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.Log;
+
+import android.content.IntentFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,7 +25,8 @@ public class DataAdapterRCList extends BaseAdapter {
     static public int idOld = -1;
     static public int idOld2 = -1;
     public  DataAdapterRCList adapter =this;
-
+    public static  BroadcastReceiver receiver;
+    public  SeekBar sbCurTime;
     public DataAdapterRCList(Activity activity, List<Record> records ) {
         this.activity = activity;
         this.records = records;
@@ -47,39 +46,34 @@ public class DataAdapterRCList extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        IntentFilter receiveCurTimePlayFilter = new IntentFilter("SendCurTimePlay");
+        receiver = new MyCurTimeReceiver();
+        activity.registerReceiver(receiver, receiveCurTimePlayFilter);
+
         // Gọi layoutInflater ra để bắt đầu ánh xạ view và data.
         LayoutInflater inflater = activity.getLayoutInflater();
-
-        // Dùng inflater để gắn giao diện list_rc_item vào biến view
         view = inflater.inflate(R.layout.list_rc_item, null);
 
-        // set tên từng record
         TextView tvName = (TextView) view.findViewById(R.id.list_item_title);
         tvName.setText(records.get(i).name);
-
-        //Set độ dài từng record
-        TextView tvName1 = (TextView) view.findViewById(R.id.list_item_length);
-        tvName1.setText(records.get(i).lenght);
-
-        //set ngày từng record
-        TextView tvName2 = (TextView) view.findViewById(R.id.list_item_date);
-        tvName2.setText(records.get(i).dateSave);
-
-        //set ẩn cái thanh thời gian của từng record
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.list_item_progress);
-        progressBar.setVisibility(View.INVISIBLE);
+        TextView tvLength = (TextView) view.findViewById(R.id.list_item_length);
+        tvLength.setText(records.get(i).lenght);
+        TextView tvDate = (TextView) view.findViewById(R.id.list_item_date);
+        tvDate.setText(records.get(i).dateSave);
+        sbCurTime = (SeekBar) view.findViewById(R.id.list_item_progress);
+        sbCurTime.setMax(MyTime.toSeconds(records.get(i).lenght));
+        sbCurTime.setVisibility(View.INVISIBLE);
 
         ImageView btn_item=(ImageView) view.findViewById(R.id.item_play_btn);
         if (records.get(i).status.equals("STOP")) {
             btn_item.setImageResource(R.drawable.playbutton);
         } else if (records.get(i).status.equals("PAUSE")) {
             btn_item.setImageResource(R.drawable.playbutton);
-            progressBar.setVisibility(View.VISIBLE);
+            sbCurTime.setVisibility(View.VISIBLE);
         } else {
             btn_item.setImageResource(R.drawable.pause);
-            progressBar.setVisibility(View.VISIBLE);
+            sbCurTime.setVisibility(View.VISIBLE);
         }
-
         btn_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +82,7 @@ public class DataAdapterRCList extends BaseAdapter {
                 String sourceRecord = records.get(i).source;
                 if (records.get(i).status.equals("STOP")) {
                     btn_item.setImageResource(R.drawable.pause); //set sang nut pause
-                    progressBar.setVisibility(View.VISIBLE);
+                    sbCurTime.setVisibility(View.VISIBLE);
                     records.get(i).play();//play lan dau tien
                     if (idOld != -1) {
                         if (i != idOld) {
@@ -143,9 +137,9 @@ public class DataAdapterRCList extends BaseAdapter {
         context.startActivity(intent);
     }
 
+
     public void handleService(Context context, Class nextActivity, String action, String sourceRecord, int i) {
         Intent playbackIntent = new Intent(context, nextActivity);
-
         playbackIntent.putExtra("ACTION", action);
         playbackIntent.putExtra("source", sourceRecord);
         if (action.equals("PLAY") || action.equals("PAUSE") ) {
@@ -158,6 +152,23 @@ public class DataAdapterRCList extends BaseAdapter {
         }
     }
 
+//    nhận lenght(int) ở recorder + curTime(int) ở player
+    public  class MyCurTimeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action) {
+                case "SendCurTimePlay":
+                    int curTime = intent.getIntExtra("curTime",0);
+                    sbCurTime.setProgress(curTime);
+                    System.out.println("reciever:"+ String.valueOf(curTime));
+                    break;
 
+                default:
+                    break;
+            }
+
+        }
+    }
 
 }

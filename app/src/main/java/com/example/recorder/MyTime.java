@@ -36,4 +36,9 @@ public class MyTime {
         if(number<10) return "0"+String.valueOf(number);
         return String.valueOf(number);
     }
+
+    public static int toSeconds(String strTime) {
+        Time t = Time.valueOf(strTime);
+        return t.getHours() * 3600 + t.getMinutes() * 60 + t.getSeconds();
+    }
 }

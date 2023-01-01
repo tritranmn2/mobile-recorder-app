@@ -1,12 +1,15 @@
 package com.example.recorder;
 
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,18 +22,29 @@ public class PlayBackground extends Service {
     static public String curSourceRecord = "";
     static public int pStart =0;
     static public int curIdRecord;
+    static public int curTime;
+    static public Thread threadCurTime;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+    @SuppressLint("HandlerLeak")
+    Handler handler =new Handler(){
+        @Override
+        public void handleMessage( Message msg) {
+            super.handleMessage(msg);
+            int curTime =(int)msg.obj;
+            Intent intentSendCurTimePlay = new Intent("SendCurTimePlay");
+            intentSendCurTimePlay.putExtra("curTime",curTime);
+            sendBroadcast(intentSendCurTimePlay);
+        }
+    };
 
     @Override
     public void onCreate() {
         super.onCreate();
+        threadCurTime = new Thread(new CurTimeRunnable());
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
-//        curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getApplication().getPackageName());
-//        player = MediaPlayer.create(getApplicationContext(), curIdRecord);
-//        setSourceRecord();
     }
 
     @Override
@@ -52,6 +66,7 @@ public class PlayBackground extends Service {
 //                player = MediaPlayer.create(getApplicationContext(), curIdRecord);
                 setSourceRecord();
                 player.start();
+                threadCurTime.start();
                 break;
             case "RESUME":
 //                curIdRecord = getResources().getIdentifier(curSourceRecord, "raw", getPackageName());
@@ -97,8 +112,6 @@ public class PlayBackground extends Service {
         }
     }
 
-
-
 //    @Override
 //    public void onStart(Intent intent, int start_id) {
 //        if (player.isPlaying() == true) {
@@ -108,4 +121,13 @@ public class PlayBackground extends Service {
 //        Log.e("playback", "onStart");
 //        player.start();
 //    }
+    public class CurTimeRunnable implements Runnable {
+        @Override public void run() {
+            if(!player.isPlaying())return;
+            curTime = player.getCurrentPosition()/1000;
+            Message msg= handler.obtainMessage(1,curTime);
+            handler.sendMessage(msg);
+            handler.postDelayed(this,1000);
+        }
+    }
 }
