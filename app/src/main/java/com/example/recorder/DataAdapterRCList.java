@@ -25,8 +25,9 @@ public class DataAdapterRCList extends BaseAdapter {
     static public int idOld = -1;
     static public int idOld2 = -1;
     public  DataAdapterRCList adapter =this;
-    public static  BroadcastReceiver receiver;
-    public  SeekBar sbCurTime;
+    public static IntentFilter receiveCurTimePlayFilter= new IntentFilter("SendCurTimePlay"); ;
+
+    //    public  SeekBar sbCurTime;
     public DataAdapterRCList(Activity activity, List<Record> records ) {
         this.activity = activity;
         this.records = records;
@@ -46,9 +47,7 @@ public class DataAdapterRCList extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        IntentFilter receiveCurTimePlayFilter = new IntentFilter("SendCurTimePlay");
-        receiver = new MyCurTimeReceiver();
-        activity.registerReceiver(receiver, receiveCurTimePlayFilter);
+
 
         // Gọi layoutInflater ra để bắt đầu ánh xạ view và data.
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -60,9 +59,31 @@ public class DataAdapterRCList extends BaseAdapter {
         tvLength.setText(records.get(i).lenght);
         TextView tvDate = (TextView) view.findViewById(R.id.list_item_date);
         tvDate.setText(records.get(i).dateSave);
-        sbCurTime = (SeekBar) view.findViewById(R.id.list_item_progress);
+        SeekBar sbCurTime = (SeekBar) view.findViewById(R.id.list_item_progress);
         sbCurTime.setMax(MyTime.toSeconds(records.get(i).lenght));
         sbCurTime.setVisibility(View.INVISIBLE);
+
+        //    nhận lenght(int) ở recorder + curTime(int) ở player
+        class MyCurTimeReceiver extends BroadcastReceiver {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                switch (action) {
+                    case "SendCurTimePlay":
+                        int curTime = intent.getIntExtra("curTime",0);
+                        sbCurTime.setProgress(curTime + 1);
+                        System.out.println("reciever:"+ String.valueOf(curTime));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+//        receiveCurTimePlayFilter = new IntentFilter("SendCurTimePlay");
+        BroadcastReceiver receiver = new MyCurTimeReceiver();
+        activity.registerReceiver(receiver, receiveCurTimePlayFilter);
+
 
         ImageView btn_item=(ImageView) view.findViewById(R.id.item_play_btn);
         if (records.get(i).status.equals("STOP")) {
@@ -87,6 +108,7 @@ public class DataAdapterRCList extends BaseAdapter {
                     if (idOld != -1) {
                         if (i != idOld) {
                             records.get(idOld).stop();
+                            activity.unregisterReceiver(receiver);
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -128,6 +150,8 @@ public class DataAdapterRCList extends BaseAdapter {
                 switchDetailActivity(context,RecordDetailActivity.class,i);
             }
         });
+
+
         return view;
     }
 
@@ -152,23 +176,5 @@ public class DataAdapterRCList extends BaseAdapter {
         }
     }
 
-//    nhận lenght(int) ở recorder + curTime(int) ở player
-    public  class MyCurTimeReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            switch (action) {
-                case "SendCurTimePlay":
-                    int curTime = intent.getIntExtra("curTime",0);
-                    sbCurTime.setProgress(curTime);
-                    System.out.println("reciever:"+ String.valueOf(curTime));
-                    break;
-
-                default:
-                    break;
-            }
-
-        }
-    }
 
 }
