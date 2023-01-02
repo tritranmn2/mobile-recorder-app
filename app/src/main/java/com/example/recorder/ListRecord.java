@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import java.util.List;
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
 public class ListRecord extends Activity {
     private static final Integer REQUEST_AUDIO_PERMISSION_CODE = 200;
+
     Recording recording;
     DataAdapterRCList adapter;
     private ListView listView;

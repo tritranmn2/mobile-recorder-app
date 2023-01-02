@@ -23,8 +23,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
         <activity android:name=".RecordDetailActivity" /> <!-- <activity android:name=".Recording"/> -->
@@ -33,11 +33,6 @@
             android:name=".ServiceRecord"
             android:enabled="true"
             android:exported="true" />
-<!--        <receiver android:name=".ListRecord$MyRecordReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter><action android:name = "SendRecord"/></intent-filter>-->
-<!--        </receiver>-->
 
     </application>
 
