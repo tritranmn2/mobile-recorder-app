@@ -132,7 +132,6 @@
         android:layout_marginTop="90dp"
         android:text="Record 01"
         android:textColor="@color/black"
-
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
