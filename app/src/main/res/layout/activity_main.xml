@@ -41,7 +41,6 @@
                 android:layout_width="35dp"
                 android:layout_height="45dp"
                 android:layout_marginRight="15dp"
-
                 android:src="@drawable/ic_search" />
 
             <ImageView
@@ -49,8 +48,7 @@
                 android:layout_width="35dp"
                 android:layout_height="45dp"
                 android:layout_marginRight="15dp"
-                android:onClick="showOptions"
-                android:src="@drawable/ic_options"
+                android:src="@drawable/ic_options" />
                 />
         </LinearLayout>
 
@@ -89,6 +87,7 @@
             android:layout_height="80dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="23dp"
+            android:onClick="ChangeIcon"
             android:src="@drawable/ic_audio" />
     </RelativeLayout>
 

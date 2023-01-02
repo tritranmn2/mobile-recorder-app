@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
+        <entry key="..\:/HK1/LTUDDD/editUI/mobile-recorder-app/app/src/main/res/layout/activity_main.xml" value="0.17708333333333334" />
+        <entry key="..\:/HK1/LTUDDD/editUI/mobile-recorder-app/app/src/main/res/layout/list_rc_item.xml" value="0.23229166666666667" />
+        <entry key="..\:/HK1/LTUDDD/editUI/mobile-recorder-app/app/src/main/res/layout/view_detail_record.xml" value="0.12952898550724637" />
+=======
         <entry key="..\:/HK1/LTUDDD/edit/mobile-recorder-app/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/HK1/LTUDDD/edit/mobile-recorder-app/app/src/main/res/drawable/background_main.xml" value="0.1" />
         <entry key="..\:/HK1/LTUDDD/edit/mobile-recorder-app/app/src/main/res/drawable/background_record.xml" value="0.1" />
@@ -15,6 +20,7 @@
         <entry key="..\:/HK1/LTUDDD/edit/mobile-recorder-app/app/src/main/res/layout/list_rc_item.xml" value="0.17708333333333334" />
         <entry key="..\:/HK1/LTUDDD/edit/mobile-recorder-app/app/src/main/res/layout/view_detail_record.xml" value="0.2" />
         <entry key="..\:/HK1/LTUDDD/edit/mobile-recorder-app/app/src/main/res/menu/options.xml" value="0.264" />
+>>>>>>> 916591f9bf739903a74b380214f62ae00891de55
         <entry key="..\:/HK1/LTUDDD/record/mobile-recorder-app/app/src/main/res/drawable/background_icon.xml" value="0.2385" />
         <entry key="..\:/HK1/LTUDDD/record/mobile-recorder-app/app/src/main/res/drawable/background_list_record.xml" value="0.218" />
         <entry key="..\:/HK1/LTUDDD/record/mobile-recorder-app/app/src/main/res/drawable/background_main.xml" value="0.218" />
