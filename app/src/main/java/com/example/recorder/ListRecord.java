@@ -12,27 +12,18 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 //chương trình chạy đầu tiên sẽ chạy file này (cày đặt mặc định trong manifest)
@@ -95,9 +86,12 @@ public class ListRecord extends Activity {
                     isRecording=true;
                     intentServiceRecord.putExtra("nameFile",fileName);
                     context.startService(intentServiceRecord);
+                    btn_rc.setImageDrawable(getResources().getDrawable(R.drawable.ic_end_record));
                 } else {
                     isRecording=false;
                     context.stopService(intentServiceRecord);
+
+                    btn_rc.setImageDrawable(getResources().getDrawable(R.drawable.ic_audio));
                 }
             }
         });
