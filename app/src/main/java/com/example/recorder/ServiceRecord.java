@@ -47,7 +47,11 @@ public class ServiceRecord extends Service {
         @Override
         public void handleMessage( Message msg) {
             super.handleMessage(msg);
-            System.out.println("handler:"+(String)msg.obj);
+            String curTime = (String)msg.obj;
+            System.out.println("handler:"+curTime);
+            Intent sendCurTimeRecordIntent = new Intent("SendCurTimeRecord");
+            sendCurTimeRecordIntent.putExtra("curTime",curTime);
+            sendBroadcast(sendCurTimeRecordIntent);
 //            send cho broast cast reciever để in setText cho textView
 
         }

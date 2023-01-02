@@ -1,6 +1,7 @@
 package com.example.recorder;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,7 @@ public class ListRecord extends Activity {
     DataAdapterRCList adapter;
     private ListView listView;
     ImageView btn_rc;
+    TextView tv_time_record;
     public static boolean isRecording = false;
     public static BroadcastReceiver receiver;
 
@@ -59,11 +62,13 @@ public class ListRecord extends Activity {
 
 
         btn_rc = (ImageView) findViewById(R.id.btn_rc);
-
+        tv_time_record = (TextView) findViewById(R.id.tv_time_record);
 //        register
         IntentFilter mainFilter = new IntentFilter("SendRecord");
+        IntentFilter curTimeFilter = new IntentFilter("SendCurTimeRecord");
         receiver = new MyRecordReceiver();
         registerReceiver(receiver, mainFilter);
+        registerReceiver(receiver, curTimeFilter);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("record notification","record notification", NotificationManager.IMPORTANCE_DEFAULT);
@@ -195,11 +200,16 @@ public class ListRecord extends Activity {
     public  class MyRecordReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String name = intent.getStringExtra("name");
-            String date = intent.getStringExtra("date");
-            String length = intent.getStringExtra("length");
-            String source = intent.getStringExtra("source");
-            addItem(name,length,source);
+            if(intent.getAction().equals("SendRecord")){
+                String name = intent.getStringExtra("name");
+                String date = intent.getStringExtra("date");
+                String length = intent.getStringExtra("length");
+                String source = intent.getStringExtra("source");
+                addItem(name,length,source);
+            }else if(intent.getAction().equals("SendCurTimeRecord")){
+                String curTime = intent.getStringExtra("curTime");
+                tv_time_record.setText(curTime);
+            }
         }
     }
 
