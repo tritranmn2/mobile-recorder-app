@@ -3,6 +3,8 @@ package com.example.recorder;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
@@ -60,6 +62,14 @@ public class PlayBackground extends Service {
             ACTION = extras.getString("ACTION");
             curSourceRecord = extras.getString("source");
             curIdRecord = extras.getInt("id");
+            if (ACTION.equals("RESUME")) {
+                int resumeTime=extras.getInt("pStart");
+                System.out.println("Progress:"+ String.valueOf(resumeTime));
+                if (resumeTime != 0) {
+                    pStart=resumeTime*1000;
+                    player.stop();
+                }
+            }
         }
         if ( player.isPlaying() && !ACTION.equals("RESUME")) {
             player.stop();
@@ -147,4 +157,18 @@ public class PlayBackground extends Service {
             handler.postDelayed(this,1000);
         }
     }
+
+//    class MyCurProgressReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String action = intent.getAction();
+//            if (action.equals("SendProgress")) {
+//                int progress = intent.getIntExtra("progress", 0);
+//                setSourceRecord();
+//                player.seekTo(progress);
+//                player.start();
+//                handler.post(curTimeRunnable);
+//            }
+//        }
+//    }
 }

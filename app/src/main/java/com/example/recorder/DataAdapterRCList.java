@@ -64,7 +64,27 @@ public class DataAdapterRCList extends BaseAdapter {
         int length =MyTime.toSeconds(records.get(i).lenght);
         sbCurTime.setMax(length);
         sbCurTime.setVisibility(View.INVISIBLE);
+        sbCurTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    Context context = sbCurTime.getContext();
+                    Intent playbackIntent = new Intent(context, PlayBackground.class);
+                    playbackIntent.putExtra("ACTION", "RESUME");
+                    playbackIntent.putExtra("source", records.get(i).source);
+                    playbackIntent.putExtra("id", i);
+                    playbackIntent.putExtra("pStart", progress);
+                    records.get(i).play();
+                    adapter.notifyDataSetChanged();
+                    context.startService(playbackIntent);
+                }
+            }
 
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
         //    nhận lenght(int) ở recorder + curTime(int) ở player
         class MyCurTimeReceiver extends BroadcastReceiver {
             @Override
@@ -80,9 +100,7 @@ public class DataAdapterRCList extends BaseAdapter {
                         activity.unregisterReceiver(this);
                         adapter.notifyDataSetChanged();
                     }
-
                 }
-
             }
         }
 //        receiveCurTimePlayFilter = new IntentFilter("SendCurTimePlay");
