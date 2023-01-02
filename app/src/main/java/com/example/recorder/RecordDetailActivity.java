@@ -56,12 +56,15 @@ public class RecordDetailActivity extends Activity {
                 if (record.status.equals("STOP")) {
                     ACTION = "PLAY";
                     record.play();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
                 } else if (record.status.equals("PAUSE")) {
                     ACTION = "RESUME";
                     record.play();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_play_detail));
                 }else if (record.status.equals("PLAY")) {
                     ACTION = "PAUSE";
                     record.pause();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
                 }
                 handleService(context,PlayBackground.class,ACTION,curRecordSource);
 
