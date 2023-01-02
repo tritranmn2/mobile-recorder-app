@@ -50,7 +50,8 @@
                 android:layout_height="45dp"
                 android:layout_marginRight="15dp"
                 android:onClick="showOptions"
-                android:src="@drawable/ic_options" />
+                android:src="@drawable/ic_options"
+                />
         </LinearLayout>
 
 
