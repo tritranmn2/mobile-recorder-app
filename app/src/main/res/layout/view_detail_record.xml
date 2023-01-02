@@ -4,41 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffe4e1"
+    android:background="#F0F8FF"
 
     tools:context=".RecordDetailActivity">
     <ImageButton
         android:id="@+id/return_button"
-        android:layout_width="57dp"
-        android:layout_height="52dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:src="?attr/homeAsUpIndicator"
+        android:src="@drawable/ic_back"
+        android:background="#F0F8FF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageButton
         android:id="@+id/mute_button"
-        android:layout_width="60dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="48dp"
         android:layout_marginBottom="48dp"
         android:adjustViewBounds="true"
-        android:maxWidth="42dp"
-        android:maxHeight="42dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/mute"
+        android:background="#F0F8FF"
+        android:src="@drawable/ic_loa1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageButton
         android:id="@+id/edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginTop="10dp"
+        android:background="#F0F8FF"
         android:layout_marginEnd="5dp"
-        android:src="@android:drawable/ic_menu_manage"
+        android:src="@drawable/ic_setting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,10 +103,10 @@
 
     <ToggleButton
         android:id="@+id/play_button"
-        android:layout_width="45dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/pause_rectangle"
+        android:background="@drawable/ic_pause_detail"
         android:textColor="@color/black"
         android:textOff=""
         android:textOn=""
@@ -139,9 +140,10 @@
     <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_width="60dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginRight="48dp"
         android:layout_marginBottom="50dp"
+        android:background="#66B2FF"
         android:checked="true"
         android:text="1.0"
         android:textOff="2.0"

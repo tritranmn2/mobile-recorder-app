@@ -41,7 +41,6 @@
                 android:layout_width="35dp"
                 android:layout_height="45dp"
                 android:layout_marginRight="15dp"
-
                 android:src="@drawable/ic_search" />
 
             <ImageView
@@ -50,6 +49,7 @@
                 android:layout_height="45dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_options" />
+                />
         </LinearLayout>
 
 
