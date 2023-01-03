@@ -60,7 +60,9 @@ public class RecordDetailActivity extends Activity {
                     playbackIntent.putExtra("source", curRecordSource);
                     playbackIntent.putExtra("id", curRecordId);
                     playbackIntent.putExtra("pStart", progress);
-//                    record.play();
+                    record.play();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
+
                     context.startService(playbackIntent);
                 }
             }
@@ -81,10 +83,12 @@ public class RecordDetailActivity extends Activity {
                     sbCurTime.setProgress(curTime);
                     String curTimeString = (new MyTime(curTime)).toString();
                     tvRecordRuntime.setText(curTimeString);
-//                    if (curTime + 1 > length) {
-////                        record.stop();
+//                    record.play();
+                    if (curTime + 1 > length) {
+                        record.stop();
+                        btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_play_detail));
 //                        unregisterReceiver(this);
-//                    }
+                    }
                 }
             }
         }
@@ -109,12 +113,15 @@ public class RecordDetailActivity extends Activity {
                 if (record.status.equals("STOP")) {
                     ACTION = "PLAY";
                     record.play();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
                 } else if (record.status.equals("PAUSE")) {
                     ACTION = "RESUME";
                     record.play();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
                 }else if (record.status.equals("PLAY")) {
                     ACTION = "PAUSE";
                     record.pause();
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_play_detail));
                 }
                 handleService(context,PlayBackground.class,ACTION,curRecordSource);
 
