@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 public class InitDatabase extends SQLiteOpenHelper {
     public InitDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
-        this.QueryData("DROP TABLE IF EXISTS Records");
+//        this.QueryData("DROP TABLE IF EXISTS Records");
         this.QueryData("CREATE TABLE IF NOT EXISTS Records(id INT, name VARCHAR(255), dateSave TEXT, length TEXT,source TEXT)");
     }
 
