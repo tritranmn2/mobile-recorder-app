@@ -129,7 +129,7 @@ public class PlayBackground extends Service {
         }
         NotificationCompat.Builder builder= new NotificationCompat.Builder(PlayBackground.this,"record notification");
         builder.setContentTitle("Current record");
-        builder.setContentText(curSourceRecord + notifyMsg);
+        builder.setContentText("Record " + notifyMsg);
         builder.setSmallIcon(R.drawable.playbutton);
         builder.setAutoCancel(true);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(PlayBackground.this);

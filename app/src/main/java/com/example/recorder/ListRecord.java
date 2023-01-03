@@ -144,7 +144,7 @@ public class ListRecord extends Activity {
 
         NotificationCompat.Builder builder= new NotificationCompat.Builder(ListRecord.this,"record notification");
         builder.setContentTitle("Add new record");
-        builder.setContentText(record.name +" is added");
+        builder.setContentText(fileName +" is added");
         builder.setSmallIcon(R.drawable.playbutton);
         builder.setAutoCancel(true);
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(ListRecord.this);
