@@ -36,7 +36,7 @@ public class ServiceRecord extends Service {
     }
 
     @Override public void onCreate() {
-        Toast.makeText(this, "Record onCreate", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Record onCreate", Toast.LENGTH_SHORT).show();
         super.onCreate();
 
     }
@@ -90,7 +90,7 @@ public class ServiceRecord extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Record onStartCommand", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Record onStartCommand", Toast.LENGTH_SHORT).show();
 
         super.onStartCommand(intent, flags, startId);
         Bundle extras = intent.getExtras();
@@ -105,7 +105,7 @@ public class ServiceRecord extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Record onDestroy", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "Record onDestroy", Toast.LENGTH_SHORT).show();
 
         super.onDestroy();
         mediaRecorder.stop();

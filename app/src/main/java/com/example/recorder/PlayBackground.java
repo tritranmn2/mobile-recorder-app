@@ -53,13 +53,13 @@ public class PlayBackground extends Service {
         super.onCreate();
         curTime=0;
 //        threadCurTime.start();
-        Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "playback onStartCm", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "playback onStartCm", Toast.LENGTH_SHORT).show();
         super.onStartCommand(intent, flags, startId);
 
         Bundle extras = intent.getExtras();
@@ -139,7 +139,7 @@ public class PlayBackground extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "playback Destroy", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "playback Destroy", Toast.LENGTH_SHORT).show();
         player.stop();
         //Có 2 dòng này là lỗi
 //        player.release();

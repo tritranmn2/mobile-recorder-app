@@ -49,7 +49,7 @@ public class ListRecord extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(this, "OnCreate 1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnCreate 1", Toast.LENGTH_SHORT).show();
 
         database = new InitDatabase(this, "data.sqlite", null, 1);
         displayAllRecords();
@@ -109,28 +109,28 @@ public class ListRecord extends Activity {
 
 
     @Override protected void onPause() {
-        Toast.makeText(this, "OnPause 1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnPause 1", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
     @Override protected void onResume() {
-        Toast.makeText(this, "OnResume 1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnResume 1", Toast.LENGTH_SHORT).show();
         super.onResume();
 
     }
 
     @Override protected void onRestart() {
-        Toast.makeText(this, "OnRestart 1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnRestart 1", Toast.LENGTH_SHORT).show();
         super.onRestart();
     }
 
     @Override protected void onDestroy() {
-        Toast.makeText(this, "OnDestroy 1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnDestroy 1", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 
     @Override protected void onStop() {
-        Toast.makeText(this, "OnStop 1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnStop 1", Toast.LENGTH_SHORT).show();
         super.onStop();
     }
 
@@ -231,11 +231,11 @@ public class ListRecord extends Activity {
                 Boolean permissionToRecord = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 if(permissionToRecord){
                     System.out.println("Permission Given");
-                    Toast.makeText(this,"Permission Given", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this,"Permission Given", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     System.out.println("Permission Denied");
-                    Toast.makeText(this,"Permission Denied", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this,"Permission Denied", Toast.LENGTH_SHORT).show();
                 }
             }
         }
