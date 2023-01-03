@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class RecordDetailActivity extends Activity {
     ImageView btnBack;
     ToggleButton btnPlay;
     TextView tvCurRecordName,tvRecordRuntime,tvRecordLength;
+    ImageButton btnMute;
     SeekBar sbCurTime;
     int curRecordId;
     String curRecordSource;
@@ -37,6 +39,7 @@ public class RecordDetailActivity extends Activity {
         tvRecordLength = (TextView) findViewById(R.id.record_length);
         btnPlay = (ToggleButton) findViewById(R.id.play_button);
         sbCurTime = (SeekBar)findViewById(R.id.seekBar) ;
+        btnMute = (ImageButton) findViewById(R.id.mute_button);
         Bundle extras = getIntent().getExtras(); //lay id truyen tu main qua
         if (extras != null) {
             curRecordId = extras.getInt("id");
@@ -127,6 +130,25 @@ public class RecordDetailActivity extends Activity {
 
             }
         });
+        btnMute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                if(!record.status.equals("PLAY") && !record.status.equals("RESUME")) return;
+                if (!ACTION.equals("MUTE")) {
+                    ACTION="MUTE";
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
+                    handleService(context,PlayBackground.class,ACTION,curRecordSource);
+
+                } else {
+                    ACTION= "RESUME";
+                    btnPlay.setButtonDrawable(getResources().getDrawable(R.drawable.ic_pause_detail));
+                    handleService(context,PlayBackground.class,"UNMUTE",curRecordSource);
+                    handleService(context,PlayBackground.class,ACTION,curRecordSource);
+
+                }
+            }
+        });
     }
 
     @Override
@@ -149,7 +171,7 @@ public class RecordDetailActivity extends Activity {
         playbackIntent.putExtra("ACTION", action);
         playbackIntent.putExtra("source", nameRecord);
         playbackIntent.putExtra("id", curRecordId);
-        if (action.equals("PLAY") || action.equals("PAUSE") ) {
+        if (action.equals("PLAY") || action.equals("PAUSE")|| action.equals("MUTE")|| action.equals("UNMUTE") ) {
             context.startService(playbackIntent);
         } else if (action.equals("STOP")) {
             context.stopService(playbackIntent);

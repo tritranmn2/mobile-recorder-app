@@ -54,6 +54,7 @@ public class PlayBackground extends Service {
         curTime=0;
 //        threadCurTime.start();
         Toast.makeText(this, "playback Created", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -105,6 +106,23 @@ public class PlayBackground extends Service {
                 notifyMsg = "is paused";
                 pStart = player.getCurrentPosition();
                 player.pause();
+                break;
+            case "MUTE":
+                notifyMsg = "is mute";
+                pStart = player.getCurrentPosition();
+                setSourceRecord();
+                player.seekTo(pStart);
+                player.setVolume(0,0);
+                player.start();
+                handler.post(curTimeRunnable);
+
+//                pStart = player.getCurrentPosition();
+
+                break;
+            case "UNMUTE":
+                notifyMsg = "is unmute";
+                player.setVolume(1,1);
+                pStart = player.getCurrentPosition();
                 break;
             default:
                 break;
