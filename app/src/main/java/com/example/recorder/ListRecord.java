@@ -33,7 +33,6 @@ import java.util.List;
 public class ListRecord extends Activity {
     private static final Integer REQUEST_AUDIO_PERMISSION_CODE = 200;
 
-    Recording recording;
     DataAdapterRCList adapter;
     private ListView listView;
     ImageView btn_rc;
