@@ -50,7 +50,26 @@ public class RecordDetailActivity extends Activity {
         int length = MyTime.toSeconds(record.lenght);
         sbCurTime.setMax(length);
         //        register
+        sbCurTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    Context context = sbCurTime.getContext();
+                    Intent playbackIntent = new Intent(context, PlayBackground.class);
+                    playbackIntent.putExtra("ACTION", "RESUME");
+                    playbackIntent.putExtra("source", curRecordSource);
+                    playbackIntent.putExtra("id", curRecordId);
+                    playbackIntent.putExtra("pStart", progress);
+//                    record.play();
+                    context.startService(playbackIntent);
+                }
+            }
 
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
         class MyCurTimeReceiver extends BroadcastReceiver {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -62,10 +81,10 @@ public class RecordDetailActivity extends Activity {
                     sbCurTime.setProgress(curTime);
                     String curTimeString = (new MyTime(curTime)).toString();
                     tvRecordRuntime.setText(curTimeString);
-                    if (curTime + 1 > length) {
-//                        records.get(i).stop();
-                        unregisterReceiver(this);
-                    }
+//                    if (curTime + 1 > length) {
+////                        record.stop();
+//                        unregisterReceiver(this);
+//                    }
                 }
             }
         }
